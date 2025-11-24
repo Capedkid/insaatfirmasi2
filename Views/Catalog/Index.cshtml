@@ -1,0 +1,252 @@
+@model IEnumerable<InsaatFirmasi.Models.Catalog>
+@{
+    var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
+
+    ViewData["Title"] = currentLang == "en" ? "Online Catalog" : "Online Katalog";
+    ViewData["Description"] = currentLang == "en"
+        ? "Online catalogs for construction materials and injection manufacturing. Download and review product catalogs."
+        : "İnşaat malzemeleri ve enjeksiyon imalatları online katalogları. Ürün kataloglarını indirin ve inceleyin.";
+    ViewData["Keywords"] = currentLang == "en"
+        ? "online catalog, product catalogs, construction materials catalog, drainage channel catalog"
+        : "online katalog, ürün katalogları, inşaat malzemeleri katalog, drenaj kanalları katalog";
+}
+
+<!-- SAYFA HERO -->
+<section class="page-hero page-hero-simple">
+    <div class="container-xl text-center">
+        <h1 class="page-hero-title">
+            @(currentLang == "en" ? "Online Catalog" : "Online Katalog")
+        </h1>
+    </div>
+</section>
+
+<!-- KATALOG LİSTESİ -->
+<section class="home-section product-groups-section">
+    <div class="container-xl">
+        <div class="home-section-header">
+            <span class="home-section-kicker">
+                @(currentLang == "en" ? "Catalogs" : "Kataloglar")
+            </span>
+            <h2 class="home-section-title">
+                @(currentLang == "en"
+                    ? "Catalogs"
+                    : "Kataloglar")
+            </h2>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4 product-groups-grid">
+                @foreach (var catalog in Model)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <article class="product-group-card catalog-card">
+                            <div class="product-group-image">
+                                @if (!string.IsNullOrEmpty(catalog.CoverImagePath))
+                                {
+                                    <img src="~/@catalog.CoverImagePath" alt="@catalog.Title" />
+                                }
+                                else if (!string.IsNullOrEmpty(catalog.CoverImageUrl))
+                                {
+                                    <img src="@catalog.CoverImageUrl" alt="@catalog.Title" />
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center justify-content-center text-muted" style="height:220px;">
+                                        <i class="fas fa-file-pdf fa-2x"></i>
+                                    </div>
+                                }
+                            </div>
+                            <div class="catalog-card-body">
+                                <div class="catalog-card-meta">
+                                    <span>
+                                        <i class="fas fa-file me-1"></i>@catalog.FileExtension?.ToUpper()
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-weight me-1"></i>@catalog.FileSize
+                                    </span>
+                                </div>
+                                <h3 class="catalog-card-title">@catalog.Title</h3>
+                                <p class="catalog-card-excerpt">
+                                    @(catalog.Description != null && catalog.Description.Length > 140
+                                        ? catalog.Description.Substring(0, 140) + "..."
+                                        : catalog.Description)
+                                </p>
+                                <div class="catalog-card-footer">
+                                    <span class="catalog-card-downloads">
+                                        <i class="fas fa-download me-1"></i>@catalog.DownloadCount indirme
+                                    </span>
+                                    <div class="catalog-card-actions">
+                                        @if (!string.IsNullOrEmpty(catalog.FilePath))
+                                        {
+                                            <a href="~/@catalog.FilePath"
+                                               target="_blank"
+                                               class="btn btn-outline-light btn-sm catalog-card-button">
+                                                İncele
+                                            </a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(catalog.FileUrl))
+                                        {
+                                            <a href="@catalog.FileUrl"
+                                               target="_blank"
+                                               class="btn btn-outline-light btn-sm catalog-card-button">
+                                                İncele
+                                            </a>
+                                        }
+                                        <a href="@Url.Action("Download", "Catalog", new { id = catalog.Id })"
+                                           class="btn btn-danger btn-sm catalog-card-button">
+                                            İndir
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                <h4>Katalog bulunamadı</h4>
+                <p>Henüz katalog eklenmemiş. Admin panelden katalog eklediğinizde burada listelenecektir.</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Katalog Özellikleri (koyu tema) -->
+<section class="home-section product-groups-section">
+    <div class="container-xl">
+        <div class="home-section-header">
+            <span class="home-section-kicker">Katalog Özellikleri</span>
+            <h2 class="home-section-title">Online kataloglarımızın avantajları</h2>
+            <p class="home-section-text">
+                Tüm kataloglarımızı ücretsiz indirebilir, mobil uyumlu yapıları sayesinde her cihazda rahatça inceleyebilirsiniz.
+            </p>
+        </div>
+        
+        <div class="row g-4 text-center text-sm-start">
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-download"></i>
+                    <h3>Ücretsiz İndirme</h3>
+                    <p>Tüm kataloglarımızı ücretsiz olarak indirebilirsiniz.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobil Uyumlu</h3>
+                    <p>Kataloglarımız tüm cihazlarda okunabilir ve net görünür.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3>Güncel İçerik</h3>
+                    <p>Katalog içerikleri düzenli olarak güncellenir ve yenilenir.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Arama Kolaylığı</h3>
+                    <p>Kataloglar içinde aradığınız bilgiyi hızlıca bulabilirsiniz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popüler Kataloglar -->
+@if (ViewBag.PopularCatalogs != null)
+{
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark">Popüler Kataloglar</h2>
+                <p class="text-muted">En çok indirilen kataloglarımız</p>
+            </div>
+            
+            <div class="row g-4">
+                @foreach (var catalog in ViewBag.PopularCatalogs as IEnumerable<InsaatFirmasi.Models.Catalog>)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="position-relative">
+                                @if (!string.IsNullOrEmpty(catalog.CoverImageUrl))
+                                {
+                                    <img src="~/uploads/catalogs/@catalog.CoverImageUrl" 
+                                         class="card-img-top" 
+                                         alt="@catalog.Title"
+                                         style="height: 200px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                                         style="height: 200px;">
+                                        <i class="fas fa-file-pdf fa-3x text-danger"></i>
+                                    </div>
+                                }
+                                
+                                <span class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 small">
+                                    <i class="fas fa-fire me-1"></i>Popüler
+                                </span>
+                            </div>
+                            
+                            <div class="card-body text-center">
+                                <h6 class="card-title fw-bold">@catalog.Title</h6>
+                                <p class="card-text text-muted small">
+                                    @(catalog.Description?.Length > 80 ? catalog.Description.Substring(0, 80) + "..." : catalog.Description)
+                                </p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    @if (!string.IsNullOrEmpty(catalog.FilePath))
+                                    {
+                                        <a href="~/@catalog.FilePath"
+                                           target="_blank"
+                                           class="btn btn-danger btn-sm">
+                                            İncele
+                                        </a>
+                                    }
+                                    else if (!string.IsNullOrEmpty(catalog.FileUrl))
+                                    {
+                                        <a href="@catalog.FileUrl"
+                                           target="_blank"
+                                           class="btn btn-danger btn-sm">
+                                            İncele
+                                        </a>
+                                    }
+                                    <a href="@Url.Action("Download", "Catalog", new { id = catalog.Id })" 
+                                       class="btn btn-outline-danger btn-sm">
+                                        İndir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        // Katalog kartlarına hover efekti
+        document.addEventListener('DOMContentLoaded', function() {
+            const catalogCards = document.querySelectorAll('.catalog-card');
+            catalogCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+}

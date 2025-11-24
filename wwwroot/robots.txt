@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /Admin
+Disallow: /admin
+
+# Siteniz canlı domainine geçtiğinde aşağıdaki örneği kendinize göre güncelleyebilirsiniz:
+# Sitemap: https://www.ornekdomain.com/sitemap.xml
+
+

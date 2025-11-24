@@ -1,0 +1,121 @@
+@model IEnumerable<InsaatFirmasi.Models.BlogPost>
+@{
+    var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
+
+    ViewData["Title"] = "Blog";
+    ViewData["Description"] = currentLang == "en"
+        ? "Latest articles and content about plastic construction solutions, drainage and wet area products."
+        : "Plastik inşaat çözümleri, drenaj ve ıslak zemin ürünleri hakkında güncel yazılar ve içerikler.";
+    ViewData["Keywords"] = currentLang == "en"
+        ? "blog, drainage, manhole, wet areas, plastic construction solutions"
+        : "blog, drenaj, rögar, ıslak zemin, plastik inşaat çözümleri";
+}
+
+<!-- SAYFA HERO -->
+<section class="page-hero page-hero-simple">
+    <div class="container-xl text-center">
+        <h1 class="page-hero-title">
+            @(currentLang == "en" ? "Blog" : "Blog")
+        </h1>
+    </div>
+</section>
+
+<!-- BLOG KARTLARI -->
+<section class="home-section product-groups-section">
+    <div class="container-xl">
+        <div class="home-section-header">
+            <span class="home-section-kicker">
+                @(currentLang == "en" ? "Blog Posts" : "Blog Yazıları")
+            </span>
+            <h2 class="home-section-title">
+                @(currentLang == "en"
+                    ? "Blog posts"
+                    : "Blog yazıları")
+            </h2>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4 product-groups-grid">
+                @foreach (var post in Model)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <a asp-controller="Blog"
+                           asp-action="Details"
+                           asp-route-id="@post.Id"
+                           class="text-decoration-none text-reset">
+                            <article class="product-group-card blog-card">
+                                <div class="product-group-image">
+                                    @if (!string.IsNullOrEmpty(post.ImagePath))
+                                    {
+                                        <img src="~/@post.ImagePath" alt="@post.Title" />
+                                    }
+                                    else if (!string.IsNullOrEmpty(post.ImageUrl))
+                                    {
+                                        <img src="@post.ImageUrl" alt="@post.Title" />
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-center justify-content-center text-muted" style="height:220px;">
+                                            <i class="fas fa-newspaper fa-2x"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-card-meta">
+                                        <span class="blog-card-date">
+                                            <i class="fas fa-calendar-alt me-1"></i>
+                                            @(post.PublishedDate?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("tr-TR")) ?? post.CreatedDate.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("tr-TR")))
+                                        </span>
+                                        @if (!string.IsNullOrWhiteSpace(post.Category))
+                                        {
+                                            <span class="blog-card-category">
+                                                <i class="fas fa-tag me-1"></i>@post.Category
+                                            </span>
+                                        }
+                                    </div>
+                                    <h3 class="blog-card-title">@post.Title</h3>
+                                    <p class="blog-card-excerpt">
+                                        @(post.Summary != null && post.Summary.Length > 140 ? post.Summary.Substring(0, 140) + "..." : post.Summary)
+                                    </p>
+                                    <div class="blog-card-footer">
+                                        <span class="blog-card-readtime">
+                                            <i class="fas fa-clock me-1"></i>
+                                            @if (post.ReadTime > 0)
+                                            {
+                                                @(currentLang == "en"
+                                                    ? $"{post.ReadTime} min read"
+                                                    : $"{post.ReadTime} dk okuma")
+                                            }
+                                            else
+                                            {
+                                                @(currentLang == "en" ? "Short read" : "Kısa okuma")
+                                            }
+                                        </span>
+                                        <span class="btn btn-outline-light btn-sm blog-card-button">
+                                            @(currentLang == "en" ? "Read More" : "Devamını Oku") <i class="fas fa-arrow-right ms-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-newspaper fa-3x mb-3"></i>
+                <h4>
+                    @(currentLang == "en" ? "No blog posts have been added yet" : "Henüz blog yazısı eklenmemiş")
+                </h4>
+                <p>
+                    @(currentLang == "en"
+                        ? "When you add blog posts from the admin panel, they will be listed here."
+                        : "Admin panel üzerinden blog yazıları eklediğinizde burada listelenecektir.")
+                </p>
+            </div>
+        }
+    </div>
+</section>

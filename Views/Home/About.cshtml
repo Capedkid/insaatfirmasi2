@@ -1,0 +1,320 @@
+@model InsaatFirmasi.Models.CorporatePageContent
+@{
+    var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
+
+    ViewData["Title"] = currentLang == "en" ? "About Us" : "Hakkımızda";
+    ViewData["Description"] = currentLang == "en"
+        ? "A modern and reliable manufacturer in plastic construction solutions."
+        : "Plastik inşaat çözümlerinde modern ve güvenilir üretici.";
+    ViewData["Keywords"] = currentLang == "en"
+        ? "about us, plastic construction, drainage, manhole, wet areas"
+        : "hakkımızda, plastik inşaat, drenaj, rögar, ıslak zemin";
+}
+
+<!-- SAYFA HERO -->
+<section class="page-hero page-hero-simple">
+    <div class="container-xl text-center">
+        <h1 class="page-hero-title">
+            @(currentLang == "en" ? "Corporate" : "Kurumsal")
+        </h1>
+    </div>
+</section>
+
+<!-- TARİHÇE VE YAKLAŞIM -->
+<section class="home-section about-history-section">
+    <div class="container-xl">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="about-text-block">
+                    <span class="home-section-kicker">
+                        @(currentLang == "en" ? "Our History" : "Tarihçemiz")
+                    </span>
+                    <h2 class="home-section-title">
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryTitle)
+                                ? Model.HistoryTitle
+                                : currentLang == "en"
+                                    ? "Plastic construction solutions since 1995"
+                                    : "1995'ten bugüne plastik inşaat çözümleri"
+                        )
+                    </h2>
+                    <p class="home-section-text">
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryText1)
+                                ? Model.HistoryText1
+                                : currentLang == "en"
+                                    ? "Our company started producing plastic bathroom and construction materials in 1995 and today leads the sector by producing drainage channels, manhole chambers and wet area products in its modern factory with 50,000 m² production area."
+                                    : "1995 yılında plastik banyo ve inşaat malzemeleri üretimine başlayan firmamız, bugün 50.000 m² üretim alanına sahip modern fabrikasında drenaj kanalları, rögar menhol kutuları ve ıslak zemin ürünleri üreterek sektöre yön veriyor."
+                        )
+                    </p>
+                    <p class="home-section-text mt-3">
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryText2)
+                                ? Model.HistoryText2
+                                : currentLang == "en"
+                                    ? "Thanks to our design-oriented approach and quality standards, our products are not only functional but also carry aesthetic value. We offer flexible production and custom design solutions according to project needs."
+                                    : "Tasarım odaklı yaklaşımımız ve kalite standartlarımız sayesinde, ürünlerimiz sadece fonksiyonel değil, aynı zamanda estetik değer de taşıyor. Projelerin ihtiyaçlarına göre esnek üretim ve özel tasarım çözümleri sunuyoruz."
+                        )
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-grid-cards">
+                    <div class="about-grid-card">
+                        <i class="fas fa-industry"></i>
+                        <h3>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem1Title)
+                                    ? Model.HistoryItem1Title
+                                    : currentLang == "en"
+                                        ? "Modern production technology"
+                                        : "Modern üretim teknolojisi"
+                            )
+                        </h3>
+                        <p>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem1Text)
+                                    ? Model.HistoryItem1Text
+                                    : currentLang == "en"
+                                        ? "High-capacity injection machines, automation lines and CNC mould shop."
+                                        : "Yüksek kapasiteli enjeksiyon makineleri, otomasyon hatları ve CNC kalıphane."
+                            )
+                        </p>
+                    </div>
+                    <div class="about-grid-card">
+                        <i class="fas fa-award"></i>
+                        <h3>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem2Title)
+                                    ? Model.HistoryItem2Title
+                                    : currentLang == "en"
+                                        ? "Quality-focused approach"
+                                        : "Kalite odaklı yaklaşım"
+                            )
+                        </h3>
+                        <p>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem2Text)
+                                    ? Model.HistoryItem2Text
+                                    : currentLang == "en"
+                                        ? "Dimensional control and compliance with standards at every stage of production."
+                                        : "Her üretim aşamasında ölçüsel kontrol ve standartlara uygunluk."
+                            )
+                        </p>
+                    </div>
+                    <div class="about-grid-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem3Title)
+                                    ? Model.HistoryItem3Title
+                                    : currentLang == "en"
+                                        ? "Innovation and design"
+                                        : "İnovasyon ve tasarım"
+                            )
+                        </h3>
+                        <p>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem3Text)
+                                    ? Model.HistoryItem3Text
+                                    : currentLang == "en"
+                                        ? "We add not only material but also aesthetic and functional value to our products."
+                                        : "Ürünlerimize sadece maddesel değil, estetik ve fonksiyonel değer de katıyoruz."
+                            )
+                        </p>
+                    </div>
+                    <div class="about-grid-card">
+                        <i class="fas fa-handshake-angle"></i>
+                        <h3>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem4Title)
+                                    ? Model.HistoryItem4Title
+                                    : currentLang == "en"
+                                        ? "Long-term collaborations"
+                                        : "Uzun soluklu iş birlikleri"
+                            )
+                        </h3>
+                        <p>
+                            @(
+                                Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.HistoryItem4Text)
+                                    ? Model.HistoryItem4Text
+                                    : currentLang == "en"
+                                        ? "Technical support and consultancy from the beginning to the delivery of projects."
+                                        : "Projelerin başlangıcından teslimine kadar teknik destek ve danışmanlık."
+                            )
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MİSYON / VİZYON -->
+<section class="home-section about-mission-vision">
+    <div class="container-xl">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="about-pill-card">
+                    <div class="about-pill-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.MissionTitle)
+                                ? Model.MissionTitle
+                                : currentLang == "en" ? "Our Mission" : "Misyonumuz"
+                        )
+                    </h3>
+                    <p>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.MissionText)
+                                ? Model.MissionText
+                                : currentLang == "en"
+                                    ? "To be a reliable partner for projects by offering high-quality, long-lasting and sustainable plastic solutions in drainage channels, manhole chambers and wet area products."
+                                    : "Drenaj kanalları, rögar menhol kutuları ve ıslak zemin ürünlerinde yüksek kaliteli, uzun ömürlü ve sürdürülebilir plastik çözümler sunarak projelerin güvenilir ortağı olmak."
+                        )
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-pill-card">
+                    <div class="about-pill-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.VisionTitle)
+                                ? Model.VisionTitle
+                                : currentLang == "en" ? "Our Vision" : "Vizyonumuz"
+                        )
+                    </h3>
+                    <p>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.VisionText)
+                                ? Model.VisionText
+                                : currentLang == "en"
+                                    ? "To be a preferred brand in plastic construction materials both in Turkey and global markets, standing out with innovation and design strength."
+                                    : "Plastik inşaat malzemelerinde hem Türkiye’de hem de global pazarda tercih edilen, inovasyon ve tasarım gücüyle öne çıkan bir marka olmak."
+                        )
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEĞERLERİMİZ -->
+<section class="home-section about-values-section">
+    <div class="container-xl">
+        <div class="home-section-header">
+            <span class="home-section-kicker">
+                @(currentLang == "en" ? "Our Values" : "Değerlerimiz")
+            </span>
+            <h2 class="home-section-title">
+                @(
+                    Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.ValuesTitle)
+                        ? Model.ValuesTitle
+                        : currentLang == "en"
+                            ? "Principles that shape our working culture"
+                            : "Çalışma kültürümüzü şekillendiren prensipler"
+                )
+            </h2>
+            <p class="home-section-text">
+                @(
+                    Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.ValuesSubtitle)
+                        ? Model.ValuesSubtitle
+                        : currentLang == "en"
+                            ? "From production to logistics, from sales to technical support, we act with these values in all processes."
+                            : "Üretimden lojistiğe, satıştan teknik desteğe kadar tüm süreçlerde bu değerlerle hareket ediyoruz."
+                )
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-gem"></i>
+                    <h3>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value1Title)
+                                ? Model.Value1Title
+                                : currentLang == "en" ? "Quality" : "Kalite"
+                        )
+                    </h3>
+                    <p>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value1Text)
+                                ? Model.Value1Text
+                                : currentLang == "en"
+                                    ? "Long service life and reliability in every detail of our products."
+                                    : "Ürünlerimizin her detayında uzun ömür ve güvenilirlik."
+                        )
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-users"></i>
+                    <h3>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value2Title)
+                                ? Model.Value2Title
+                                : currentLang == "en" ? "Customer focus" : "Müşteri odaklılık"
+                        )
+                    </h3>
+                    <p>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value2Text)
+                                ? Model.Value2Text
+                                : currentLang == "en"
+                                    ? "Tailored solutions and close communication for each project."
+                                    : "Her proje için ihtiyaca özel çözüm ve yakın iletişim."
+                        )
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value3Title)
+                                ? Model.Value3Title
+                                : currentLang == "en" ? "Innovation" : "İnovasyon"
+                        )
+                    </h3>
+                    <p>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value3Text)
+                                ? Model.Value3Text
+                                : currentLang == "en"
+                                    ? "New product ideas and a culture of continuous improvement."
+                                    : "Yeni ürün fikirleri ve sürekli iyileştirme kültürü."
+                        )
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="about-value-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value4Title)
+                                ? Model.Value4Title
+                                : currentLang == "en" ? "Reliability" : "Güvenilirlik"
+                        )
+                    </h3>
+                    <p>
+                        @(
+                            Model != null && currentLang == "tr" && !string.IsNullOrEmpty(Model.Value4Text)
+                                ? Model.Value4Text
+                                : currentLang == "en"
+                                    ? "Long-term business partnerships and sustainable supply."
+                                    : "Uzun yıllara yayılan iş ortaklıkları ve sürdürülebilir tedarik."
+                        )
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

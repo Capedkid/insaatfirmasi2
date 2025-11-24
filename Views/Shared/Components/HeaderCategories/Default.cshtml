@@ -1,0 +1,45 @@
+@using InsaatFirmasi.Models
+@model IEnumerable<Category>
+
+@if (Model != null && Model.Any())
+{
+    <div class="nav-dropdown-grid">
+        @foreach (var category in Model)
+        {
+            <div class="nav-dropdown-col">
+                <a asp-controller="Product"
+                   asp-action="Category"
+                   asp-route-id="@category.Id"
+                   class="text-decoration-none text-reset">
+                    <div class="product-group-card nav-product-card">
+                        <div class="product-group-image">
+                            @if (!string.IsNullOrEmpty(category.ImagePath))
+                            {
+                                <img src="~/@category.ImagePath" alt="@category.Name" />
+                            }
+                            else if (!string.IsNullOrEmpty(category.ImageUrl))
+                            {
+                                <img src="@category.ImageUrl" alt="@category.Name" />
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                                    <i class="fas fa-layer-group fa-2x"></i>
+                                </div>
+                            }
+                        </div>
+                        <h3>@category.Name</h3>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="px-2 py-1 text-muted small">
+        Henüz kategori eklenmemiş.
+    </div>
+}
+
+

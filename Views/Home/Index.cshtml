@@ -1,0 +1,673 @@
+﻿@using InsaatFirmasi.Models
+@{
+    var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
+    var sliders = ViewBag.Sliders as List<Slider> ?? new List<Slider>();
+    var homeCategories = ViewBag.Categories as List<Category> ?? new List<Category>();
+}
+
+@section SeoStructuredData {
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "Organization",
+      "name": "İnşaat Plastik Çözümler",
+      "url": "@($"{Context.Request.Scheme}://{Context.Request.Host}")",
+      "logo": "@($"{Context.Request.Scheme}://{Context.Request.Host}/favicon.ico")",
+      "description": "Plastik drenaj kanalları, rögar menhol kutuları ve ıslak zemin ürünleri üreten inşaat firması.",
+      "contactPoint": {
+        "@@type": "ContactPoint",
+        "contactType": "customer service",
+        "areaServed": "TR",
+        "availableLanguage": ["tr", "en"]
+      }
+    }
+    </script>
+}
+
+<!-- HERO SLIDER -->
+<section class="hero-slider-section">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6500">
+        @if (sliders.Any())
+        {
+            <div class="carousel-indicators">
+                @for (var i = 0; i < sliders.Count; i++)
+                {
+                    <button type="button"
+                            data-bs-target="#heroCarousel"
+                            data-bs-slide-to="@i"
+                            class="@(i == 0 ? "active" : "")"
+                            @(i == 0 ? "aria-current=\"true\"" : null)
+                            aria-label="Slide @(i + 1)"></button>
+                }
+            </div>
+
+            <div class="carousel-inner">
+                @for (var i = 0; i < sliders.Count; i++)
+                {
+                    var slider = sliders[i];
+                    var bgImage = !string.IsNullOrEmpty(slider.ImagePath)
+                        ? Url.Content("~/" + slider.ImagePath)
+                        : "";
+                    var hasAnyText = !string.IsNullOrEmpty(slider.Kicker)
+                                     || !string.IsNullOrEmpty(slider.Title)
+                                     || !string.IsNullOrEmpty(slider.Subtitle);
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="hero-slide text-white"
+                             style="@(string.IsNullOrEmpty(bgImage)
+                                 ? ""
+                                 : $"background-image: linear-gradient(120deg, rgba(15,23,42,0.78), rgba(15,23,42,0.55), rgba(185,28,28,0.5)), url('{bgImage}'); background-size: cover; background-position: center; background-repeat: no-repeat;")">
+                            <div class="container-xl">
+                                <div class="row align-items-center min-vh-75">
+                                    @if (hasAnyText)
+                                    {
+                                        <div class="col-lg-6">
+                                            <div class="hero-content">
+                                                @if (!string.IsNullOrEmpty(slider.Kicker))
+                                                {
+                                                    <span class="hero-badge badge bg-danger-subtle text-uppercase">
+                                                        @slider.Kicker
+                                                    </span>
+                                                }
+                                                @if (!string.IsNullOrEmpty(slider.Title))
+                                                {
+                                                    <h1 class="display-4 fw-bold mb-3">
+                                                        @slider.Title
+                                                    </h1>
+                                                }
+                                                @if (!string.IsNullOrEmpty(slider.Subtitle))
+                                                {
+                                                    <p class="lead text-white-50 mb-4">@slider.Subtitle</p>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(slider.Button1Type) || !string.IsNullOrEmpty(slider.Button2Type))
+                                                {
+                                                    <div class="hero-buttons d-flex flex-wrap gap-3 mt-3">
+                                                        @if (!string.IsNullOrEmpty(slider.Button1Type))
+                                                        {
+                                                            var type1 = slider.Button1Type;
+                                                            string? url1 = null;
+                                                            string text1 = "";
+                                                            string icon1 = "fas fa-arrow-right";
+                                                            if (type1 == "products")
+                                                            {
+                                                                url1 = Url.Action("Index", "Product");
+                                                                text1 = currentLang == "en" ? "Explore Products" : "Ürünleri Keşfet";
+                                                                icon1 = "fas fa-box-open";
+                                                            }
+                                                            else if (type1 == "contact")
+                                                            {
+                                                                url1 = Url.Action("Index", "Contact");
+                                                                text1 = currentLang == "en" ? "Contact" : "İletişim";
+                                                                icon1 = "fas fa-phone-alt";
+                                                            }
+                                                            else if (type1 == "catalog")
+                                                            {
+                                                                url1 = Url.Action("Index", "Catalog");
+                                                                text1 = currentLang == "en" ? "Online Catalog" : "Online Katalog";
+                                                                icon1 = "fas fa-file-pdf";
+                                                            }
+                                                            else if (type1 == "blog")
+                                                            {
+                                                                url1 = Url.Action("Index", "Blog");
+                                                                text1 = "Blog";
+                                                                icon1 = "fas fa-newspaper";
+                                                            }
+
+                                                            if (!string.IsNullOrEmpty(url1))
+                                                            {
+                                                                <a href="@url1" class="btn btn-danger btn-lg px-4">
+                                                                    <i class="@icon1 me-2"></i> @text1
+                                                                </a>
+                                                            }
+                                                        }
+
+                                                        @if (!string.IsNullOrEmpty(slider.Button2Type))
+                                                        {
+                                                            var type2 = slider.Button2Type;
+                                                            string? url2 = null;
+                                                            string text2 = "";
+                                                            string icon2 = "fas fa-arrow-right";
+                                                            if (type2 == "products")
+                                                            {
+                                                                url2 = Url.Action("Index", "Product");
+                                                                text2 = currentLang == "en" ? "Explore Products" : "Ürünleri Keşfet";
+                                                                icon2 = "fas fa-box-open";
+                                                            }
+                                                            else if (type2 == "contact")
+                                                            {
+                                                                url2 = Url.Action("Index", "Contact");
+                                                                text2 = currentLang == "en" ? "Contact" : "İletişim";
+                                                                icon2 = "fas fa-phone-alt";
+                                                            }
+                                                            else if (type2 == "catalog")
+                                                            {
+                                                                url2 = Url.Action("Index", "Catalog");
+                                                                text2 = currentLang == "en" ? "Online Catalog" : "Online Katalog";
+                                                                icon2 = "fas fa-file-pdf";
+                                                            }
+                                                            else if (type2 == "blog")
+                                                            {
+                                                                url2 = Url.Action("Index", "Blog");
+                                                                text2 = "Blog";
+                                                                icon2 = "fas fa-newspaper";
+                                                            }
+
+                                                            if (!string.IsNullOrEmpty(url2))
+                                                            {
+                                                                <a href="@url2" class="btn btn-outline-light btn-lg px-4">
+                                                                    <i class="@icon2 me-2"></i> @text2
+                                                                </a>
+                                                            }
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 d-none d-lg-block"></div>
+                                    }
+                                    else
+                                    {
+                                        <!-- Sadece görsel: metin ve buton yok -->
+                                        <div class="col-12"></div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <!-- Eski statik slider (fallback) -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <div class="hero-slide drenaj-slide text-white">
+                        <div class="container-xl">
+                            <div class="row align-items-center min-vh-75">
+                                <div class="col-lg-6">
+                                    <div class="hero-content">
+                                        <span class="hero-badge badge bg-danger-subtle text-uppercase">
+                                            <i class="fas fa-water me-2"></i>
+                                            @(currentLang == "en" ? "Drainage Systems" : "Drenaj Sistemleri")
+                                        </span>
+                                        <h1 class="display-4 fw-bold mb-3">
+                                            @Html.Raw(currentLang == "en"
+                                                ? "Modern <span class=\"text-accent\">drainage solutions</span> in red & black tones"
+                                                : "Kırmızı & siyah tonlarda <span class=\"text-accent\">modern drenaj çözümleri</span>")
+                                        </h1>
+                                        <p class="lead text-white-50 mb-4">
+                                            @(currentLang == "en"
+                                                ? "We provide long-lasting and aesthetic solutions for your infrastructure projects with industrial plastic drainage channels."
+                                                : "Endüstriyel plastik drenaj kanalları ile altyapı projelerinize uzun ömürlü ve estetik çözümler sunuyoruz.")
+                                        </p>
+                                        <div class="hero-features mb-4">
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center small">
+                                                        <i class="fas fa-check-circle text-accent me-2"></i>
+                                                        @(currentLang == "en" ? "UV-resistant material" : "UV dayanımlı malzeme")
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center small">
+                                                        <i class="fas fa-check-circle text-accent me-2"></i>
+                                                        @(currentLang == "en" ? "Fast and easy installation" : "Hızlı ve kolay montaj")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hero-buttons d-flex flex-wrap gap-3">
+                                            <a href="@Url.Action("Index", "Product")" class="btn btn-danger btn-lg px-4">
+                                                <i class="fas fa-box-open me-2"></i>
+                                                @(currentLang == "en" ? "Explore Products" : "Ürünleri Keşfet")
+                                            </a>
+                                            <a href="@Url.Action("Index", "Catalog")" class="btn btn-outline-light btn-lg px-4">
+                                                <i class="fas fa-file-pdf me-2"></i>
+                                                @(currentLang == "en" ? "Online Catalog" : "Online Katalog")
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-none d-lg-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <div class="hero-slide rogar-slide text-white">
+                        <div class="container-xl">
+                            <div class="row align-items-center min-vh-75">
+                                <div class="col-lg-6">
+                                    <div class="hero-content">
+                                        <span class="hero-badge badge bg-danger-subtle text-uppercase">
+                                            <i class="fas fa-cubes me-2"></i>
+                                            @(currentLang == "en" ? "Manhole & Inspection Chambers" : "Rögar & Menhol")
+                                        </span>
+                                        <h1 class="display-4 fw-bold mb-3">
+                                            @Html.Raw(currentLang == "en"
+                                                ? "Plastic manhole chambers for <span class=\"text-accent\">safe infrastructure solutions</span>"
+                                                : "Güvenli <span class=\"text-accent\">altyapı çözümleri</span> için plastik rögar kutuları")
+                                        </h1>
+                                        <p class="lead text-white-50 mb-4">
+                                            @(currentLang == "en"
+                                                ? "Design your infrastructure safely with plastic manhole and inspection chambers in different sizes and load classes."
+                                                : "Farklı ebat ve yük sınıflarındaki plastik rögar ve menhol kutuları ile altyapınızı güvenle tasarlayın.")
+                                        </p>
+                                        <div class="hero-features mb-4">
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center small">
+                                                        <i class="fas fa-check-circle text-accent me-2"></i>
+                                                        @(currentLang == "en" ? "Lightweight and durable structure" : "Hafif ve dayanıklı yapı")
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center small">
+                                                        <i class="fas fa-check-circle text-accent me-2"></i>
+                                                        @(currentLang == "en" ? "Multiple connection options" : "Farklı bağlantı seçenekleri")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hero-buttons d-flex flex-wrap gap-3">
+                                            <a href="@Url.Action("Index", "Product")" class="btn btn-danger btn-lg px-4">
+                                                <i class="fas fa-layer-group me-2"></i>
+                                                @(currentLang == "en" ? "All Products" : "Tüm Ürünler")
+                                            </a>
+                                            <a href="@Url.Action("Index", "Contact")" class="btn btn-outline-light btn-lg px-4">
+                                                <i class="fas fa-phone-alt me-2"></i>
+                                                @(currentLang == "en" ? "Let's Talk About Your Project" : "Projenizi Konuşalım")
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-none d-lg-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="carousel-item">
+                    <div class="hero-slide islak-slide text-white">
+                        <div class="container-xl">
+                            <div class="row align-items-center min-vh-75">
+                                <div class="col-lg-6">
+                                    <div class="hero-content">
+                                        <span class="hero-badge badge bg-danger-subtle text-uppercase">
+                                            <i class="fas fa-shower me-2"></i>
+                                            @(currentLang == "en" ? "Wet Areas" : "Islak Zemin")
+                                        </span>
+                                        <h1 class="display-4 fw-bold mb-3">
+                                            @Html.Raw(currentLang == "en"
+                                                ? "Aesthetic <span class=\"text-accent\">bathroom and wet area</span> solutions"
+                                                : "Estetik <span class=\"text-accent\">banyo ve ıslak zemin</span> çözümleri")
+                                        </h1>
+                                        <p class="lead text-white-50 mb-4">
+                                            @(currentLang == "en"
+                                                ? "Add value to your architectural projects with our modern plastic wet area products."
+                                                : "Modern çizgilere sahip plastik ıslak zemin ürünlerimizle mimari projelerinize değer katın.")
+                                        </p>
+                                        <div class="hero-features mb-4">
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center small">
+                                                        <i class="fas fa-check-circle text-accent me-2"></i>
+                                                        @(currentLang == "en" ? "Hygienic and easy to maintain" : "Hijyenik ve bakımı kolay")
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center small">
+                                                        <i class="fas fa-check-circle text-accent me-2"></i>
+                                                        @(currentLang == "en" ? "Wide product range" : "Zengin ürün çeşitliliği")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hero-buttons d-flex flex-wrap gap-3">
+                                            <a href="@Url.Action("Index", "Product")" class="btn btn-danger btn-lg px-4">
+                                                <i class="fas fa-bath me-2"></i>
+                                                @(currentLang == "en" ? "Wet Area Products" : "Islak Zemin Ürünleri")
+                                            </a>
+                                            <a href="#neden-biz" class="btn btn-outline-light btn-lg px-4">
+                                                @(currentLang == "en" ? "Why Us?" : "Neden Biz?")
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-none d-lg-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">@(currentLang == "en" ? "Previous" : "Önceki")</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">@(currentLang == "en" ? "Next" : "Sonraki")</span>
+        </button>
+    </div>
+</section>
+
+<!-- ÜRÜN GRUPLARIMIZ -->
+<section class="home-section product-groups-section">
+    <div class="container-xl">
+        <div class="home-section-header">
+            <span class="home-section-kicker">
+                @(currentLang == "en" ? "Product Groups" : "Ürün Gruplarımız")
+            </span>
+            <h2 class="home-section-title">
+                @(currentLang == "en"
+                    ? "Product groups"
+                    : "Ürün grupları")
+            </h2>
+        </div>
+
+        @if (homeCategories.Any())
+        {
+            <div class="row g-4 product-groups-grid">
+                @foreach (var category in homeCategories.Take(6))
+                {
+                    <div class="col-md-4">
+                        <a asp-controller="Product" asp-action="Category" asp-route-id="@category.Id" class="text-decoration-none text-reset">
+                            <div class="product-group-card">
+                                <div class="product-group-image">
+                                    @if (!string.IsNullOrEmpty(category.ImagePath))
+                                    {
+                                        <img src="~/@category.ImagePath" alt="@category.Name" />
+                                    }
+                                    else if (!string.IsNullOrEmpty(category.ImageUrl))
+                                    {
+                                        <img src="@category.ImageUrl" alt="@category.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                                            <i class="fas fa-layer-group fa-2x"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <h3>@category.Name</h3>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center text-muted py-4">
+                <i class="fas fa-layer-group fa-2x mb-2"></i>
+                <p>
+                    @(currentLang == "en"
+                        ? "No product group has been added yet. Once you add categories from the admin panel, they will appear here."
+                        : "Henüz ürün grubu eklenmemiş. Admin panelden kategori eklediğinizde burada görünecektir.")
+                </p>
+            </div>
+        }
+    </div>
+@{
+    var aboutContent = ViewBag.AboutContent as AboutSectionContent;
+}
+
+<!-- HAKKIMIZDA -->
+<section class="home-section about-section">
+    <div class="container-xl">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="about-text-block">
+                    <span class="home-section-kicker">
+                        @(currentLang == "en" ? "About Us" : "Hakkımızda")
+                    </span>
+                    <h2 class="home-section-title">
+                        @(
+                            aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Title)
+                                ? aboutContent.Title
+                                : currentLang == "en"
+                                    ? "A reliable manufacturer in plastic construction solutions"
+                                    : "Plastik inşaat çözümlerinde güvenilir üretici"
+                        )
+                    </h2>
+                    <p class="home-section-text">
+                        @(
+                            aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Subtitle)
+                                ? aboutContent.Subtitle
+                                : currentLang == "en"
+                                    ? "Since 1995, we have been producing drainage channels, manhole chambers and wet area products to provide long-lasting solutions for your infrastructure and superstructure projects. With our modern production line and design-oriented approach, we take plastic construction materials to the next level."
+                                    : "1995 yılından bugüne drenaj kanalları, rögar menhol kutuları ve ıslak zemin ürünleri üreterek altyapı ve üstyapı projelerine uzun ömürlü çözümler sunuyoruz. Modern üretim hattımız ve tasarım odaklı yaklaşımımızla plastik inşaat malzemelerini bir üst seviyeye taşıyoruz."
+                        )
+                    </p>
+                    <div class="about-highlights">
+                        <div class="about-highlight-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>
+                                    @(
+                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item1Title)
+                                            ? aboutContent.Item1Title
+                                            : currentLang == "en"
+                                                ? "25+ years of experience"
+                                                : "25+ yıllık tecrübe"
+                                    )
+                                </strong>
+                                <span>
+                                    @(
+                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item1Text)
+                                            ? aboutContent.Item1Text
+                                            : currentLang == "en"
+                                                ? "A trusted brand in infrastructure and wet area projects."
+                                                : "Altyapı ve ıslak zemin projelerinde güvenilen marka."
+                                    )
+                                </span>
+                            </div>
+                        </div>
+                        <div class="about-highlight-item">
+                            <i class="fas fa-industry"></i>
+                            <div>
+                                <strong>
+                                    @(
+                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item2Title)
+                                            ? aboutContent.Item2Title
+                                            : currentLang == "en"
+                                                ? "Strong production infrastructure"
+                                                : "Güçlü üretim altyapısı"
+                                    )
+                                </strong>
+                                <span>
+                                    @(
+                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item2Text)
+                                            ? aboutContent.Item2Text
+                                            : currentLang == "en"
+                                                ? "High-capacity injection line and modern mould shop."
+                                                : "Yüksek kapasiteli enjeksiyon hattı ve modern kalıphane."
+                                    )
+                                </span>
+                            </div>
+                        </div>
+                        <div class="about-highlight-item">
+                            <i class="fas fa-handshake-angle"></i>
+                            <div>
+                                <strong>
+                                    @(
+                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item3Title)
+                                            ? aboutContent.Item3Title
+                                            : currentLang == "en"
+                                                ? "Project-specific solutions"
+                                                : "Projeye özel çözümler"
+                                    )
+                                </strong>
+                                <span>
+                                    @(
+                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item3Text)
+                                            ? aboutContent.Item3Text
+                                            : currentLang == "en"
+                                                ? "Custom products and project support for your needs."
+                                                : "Müşteriye özel ürün ve proje desteği."
+                                    )
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a asp-controller="Home" asp-action="About" class="btn btn-danger btn-lg about-more-btn mt-3">
+                        @(currentLang == "en" ? "Learn More" : "Daha Fazla Bilgi")
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                @{
+                    var aboutImages = ViewBag.AboutImages as List<InsaatFirmasi.Models.AboutImage> ?? new List<InsaatFirmasi.Models.AboutImage>();
+                }
+                @if (aboutImages.Any())
+                {
+                    <div id="aboutCarousel" class="carousel slide about-carousel" data-bs-ride="carousel" data-bs-interval="3000">
+                        <div class="carousel-inner">
+                            @for (var i = 0; i < aboutImages.Count; i++)
+                            {
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="~/@aboutImages[i].ImagePath"
+                                         class="d-block w-100" alt="Hakkımızda görseli @(i + 1)" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div id="aboutCarousel" class="carousel slide about-carousel" data-bs-ride="carousel" data-bs-interval="3000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://images.pexels.com/photos/2381463/pexels-photo-2381463.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                     class="d-block w-100" alt="Üretim hattı" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.pexels.com/photos/5691605/pexels-photo-5691605.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                     class="d-block w-100" alt="Fabrika ve stok alanı" />
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                     class="d-block w-100" alt="Mühendislik ve proje desteği" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@{
+    var referenceLogos = ViewBag.ReferenceLogos as List<ReferenceLogo> ?? new List<ReferenceLogo>();
+    var referenceContent = ViewBag.ReferenceContent as ReferenceSectionContent;
+}
+@if (referenceLogos.Any())
+{
+    <!-- REFERANSLARIMIZ (Hakkımızda bölümü ile aynı tasarım) -->
+    <section class="home-section about-section">
+        <div class="container-xl">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="about-text-block">
+                        <span class="home-section-kicker">
+                            @(currentLang == "en" ? "References" : "Referanslarımız")
+                        </span>
+                        <h2 class="home-section-title">
+                            @(
+                                referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Title)
+                                    ? referenceContent.Title
+                                    : currentLang == "en"
+                                        ? "Brands that trust our plastic construction solutions"
+                                        : "Plastik inşaat çözümlerimize güvenen markalar"
+                            )
+                        </h2>
+                        <p class="home-section-text">
+                            @(
+                                referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Subtitle)
+                                    ? referenceContent.Subtitle
+                                    : currentLang == "en"
+                                        ? "We work with many brands and projects in infrastructure, drainage channels, manhole chambers and wet area applications."
+                                        : "Altyapı, drenaj kanalları, rögar menhol kutuları ve ıslak zemin uygulamalarında birçok marka ve projeyle birlikte çalışıyoruz."
+                            )
+                        </p>
+                        <div class="about-highlights">
+                            <div class="about-highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                <strong>
+                                    @(
+                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item1Title)
+                                            ? referenceContent.Item1Title
+                                            : currentLang == "en"
+                                                ? "Long-term collaborations"
+                                                : "Uzun soluklu iş birlikleri"
+                                    )
+                                </strong>
+                                <span>
+                                    @(
+                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item1Text)
+                                            ? referenceContent.Item1Text
+                                            : currentLang == "en"
+                                                ? "We establish long-term partnerships with our references based on trust and continuity."
+                                                : "Referanslarımızla güven ve sürdürülebilirlik esaslı uzun vadeli iş ortaklıkları kuruyoruz."
+                                    )
+                                </span>
+                                </div>
+                            </div>
+                            <div class="about-highlight-item">
+                                <i class="fas fa-industry"></i>
+                                <div>
+                                <strong>
+                                    @(
+                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item2Title)
+                                            ? referenceContent.Item2Title
+                                            : currentLang == "en"
+                                                ? "Different sectors"
+                                                : "Farklı sektörler"
+                                    )
+                                </strong>
+                                <span>
+                                    @(
+                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item2Text)
+                                            ? referenceContent.Item2Text
+                                            : currentLang == "en"
+                                                ? "From industrial facilities to public projects, we are involved in many different fields."
+                                                : "Endüstriyel tesislerden kamu projelerine kadar birçok farklı alanda yer alıyoruz."
+                                    )
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="referencesCarousel" class="carousel slide about-carousel" data-bs-ride="carousel" data-bs-interval="2500">
+                        <div class="carousel-inner">
+                            @for (var i = 0; i < referenceLogos.Count; i++)
+                            {
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="~/@referenceLogos[i].ImagePath"
+                                         class="d-block w-100"
+                                         alt="Referans logosu @(i + 1)" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

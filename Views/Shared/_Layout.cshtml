@@ -1,0 +1,178 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@{
+    var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
+    var request = Context.Request;
+    var currentUrl = request != null ? $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}" : "";
+    var siteBaseUrl = request != null ? $"{request.Scheme}://{request.Host}" : "";
+
+    var footerText = "İnşaat Plastik Çözümler";
+    try
+    {
+        var settingsFolder = System.IO.Path.Combine(Env.WebRootPath, "uploads", "settings");
+        var footerPath = System.IO.Path.Combine(settingsFolder, "footer-text.txt");
+        if (System.IO.File.Exists(footerPath))
+        {
+            footerText = System.IO.File.ReadAllText(footerPath);
+        }
+    }
+    catch
+    {
+        footerText = "İnşaat Plastik Çözümler";
+    }
+}
+<!DOCTYPE html>
+<html lang="@currentLang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] ?? "İnşaat Plastik Çözümler") - Konap</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "Plastik drenaj kanalları, rögar menhol kutuları ve ıslak zemin çözümleri üreten modern inşaat firması.")" />
+    <meta name="keywords" content="@(ViewData["Keywords"] ?? "plastik drenaj kanalı,rögar kutusu,menhol kutusu,ıslak zemin,plastik ızgara,inşaat plastik çözümler")" />
+    <link rel="canonical" href="@currentUrl" />
+    <meta property="og:title" content="@(ViewData["OgTitle"] ?? ViewData["Title"] ?? "İnşaat Firması")" />
+    <meta property="og:description" content="@(ViewData["OgDescription"] ?? ViewData["Description"] ?? "Plastik drenaj, rögar ve ıslak zemin çözümleri")" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@currentUrl" />
+    @if (ViewData["OgImage"] is string ogImage && !string.IsNullOrWhiteSpace(ogImage))
+    {
+        <meta property="og:image" content="@(ogImage.StartsWith("http") ? ogImage : siteBaseUrl + ogImage)" />
+    }
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/InsaatFirmasi.styles.css" asp-append-version="true" />
+
+    @RenderSection("SeoStructuredData", required: false)
+</head>
+<body class="site-body">
+    <div class="page-loader" id="pageLoader">
+        <div class="page-loader-spinner"></div>
+    </div>
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="container-xl header-inner">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo">
+                @await Component.InvokeAsync("HeaderLogo")
+            </a>
+
+            <button type="button"
+                    class="mobile-nav-toggle"
+                    id="mobileNavToggle"
+                    aria-label="Menüyü aç/kapat"
+                    aria-expanded="false">
+                <span class="mobile-nav-toggle-bar"></span>
+                <span class="mobile-nav-toggle-bar"></span>
+                <span class="mobile-nav-toggle-bar"></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <ul class="main-nav-list">
+                    <li><a class="main-nav-link" asp-area="" asp-controller="Home" asp-action="Index">@(currentLang == "en" ? "Home" : "Anasayfa")</a></li>
+                    <li><a class="main-nav-link" asp-route="kurumsal">@(currentLang == "en" ? "About" : "Kurumsal")</a></li>
+                    <li class="nav-item-products">
+                        <a class="main-nav-link" asp-route="urunler">@(currentLang == "en" ? "Products" : "Ürünler")</a>
+                        <div class="nav-dropdown">
+                            @await Component.InvokeAsync("HeaderCategories")
+                        </div>
+                    </li>
+                    <li><a class="main-nav-link" asp-route="blog">Blog</a></li>
+                    <li><a class="main-nav-link" asp-controller="Catalog" asp-action="Index">@(currentLang == "en" ? "Online Catalog" : "Online Katalog")</a></li>
+                    <li><a class="main-nav-link" asp-route="iletisim">@(currentLang == "en" ? "Contact" : "İletişim")</a></li>
+                </ul>
+
+                <div class="main-nav-right">
+                    <form asp-controller="Language" asp-action="Set" method="post" class="lang-switch" aria-label="Dil seçimi">
+                        @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@((request?.Path ?? PathString.Empty).ToString() + (request?.QueryString.ToString() ?? string.Empty))" />
+                        <button type="submit" name="lang" value="tr" class="lang-btn @(currentLang == "tr" ? "active" : "")">TR</button>
+                        <button type="submit" name="lang" value="en" class="lang-btn @(currentLang == "en" ? "active" : "")">EN</button>
+                    </form>
+                    <button type="button" class="nav-icon-btn" id="headerSearchButton" aria-label="Ürün ara">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER SEARCH OVERLAY -->
+    <div id="headerSearchOverlay" class="header-search-overlay" aria-hidden="true">
+        <div class="header-search-backdrop"></div>
+        <div class="header-search-panel">
+            <div class="header-search-header">
+                <input type="text"
+                       id="headerSearchInput"
+                       class="header-search-input"
+                       placeholder='@(currentLang == "en" ? "Search products or categories..." : "Ürün veya kategori ara...")'
+                       autocomplete="off" />
+                <button type="button" class="header-search-close" id="headerSearchClose" aria-label="Kapat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="headerSearchResults" class="header-search-results">
+                <div class="header-search-empty">
+                    @(currentLang == "en" ? "Type at least 2 characters to search." : "Arama yapmak için en az 2 karakter yazın.")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <main class="site-main">
+        @RenderBody()
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container-xl">
+            <div class="row gy-4 align-items-start">
+                <div class="col-md-4">
+                    <div class="footer-brand">
+                        <span class="brand-mark small"></span>
+                        <div>
+                            <div class="footer-brand-title">
+                                @(currentLang == "en" ? "Construction Plastic Solutions" : "İnşaat Plastik Çözümler")
+                            </div>
+                            <div class="footer-brand-subtitle">
+                                @(currentLang == "en"
+                                    ? "Drainage, manhole and wet area products"
+                                    : "Drenaj, rögar ve ıslak zemin ürünleri")
+                            </div>
+                        </div>
+                    </div>
+                    <p class="footer-text">
+                        @(currentLang == "en"
+                            ? "We provide long-lasting solutions for your infrastructure and superstructure projects with modern plastic construction materials."
+                            : "Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz.")
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="footer-heading">
+                        @(currentLang == "en" ? "Sitemap" : "Site Haritası")
+                    </h6>
+                    <ul class="footer-links">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">@(currentLang == "en" ? "Home" : "Anasayfa")</a></li>
+                        <li><a asp-route="kurumsal">@(currentLang == "en" ? "About" : "Hakkımızda")</a></li>
+                        <li><a asp-route="urunler">@(currentLang == "en" ? "Products" : "Ürünler")</a></li>
+                        <li><a asp-route="blog">Blog</a></li>
+                        <li><a asp-route="iletisim">@(currentLang == "en" ? "Contact" : "İletişim")</a></li>
+                    </ul>
+                </div>
+                @await Component.InvokeAsync("ContactInfo")
+            </div>
+
+            <div class="footer-bottom">
+                <span>
+                    © @DateTime.Now.Year @footerText
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
