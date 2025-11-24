@@ -11,11 +11,20 @@ namespace InsaatFirmasi.Models
         [StringLength(200, ErrorMessage = "Ürün adı en fazla 200 karakter olabilir")]
         public string Name { get; set; } = string.Empty;
 
+        [StringLength(200, ErrorMessage = "English product name can be at most 200 characters")]
+        public string? NameEn { get; set; }
+
         [StringLength(1000, ErrorMessage = "Açıklama en fazla 1000 karakter olabilir")]
         public string? Description { get; set; }
 
+        [StringLength(1000, ErrorMessage = "English description can be at most 1000 characters")]
+        public string? DescriptionEn { get; set; }
+
         [StringLength(2000, ErrorMessage = "Detaylı açıklama en fazla 2000 karakter olabilir")]
         public string? DetailedDescription { get; set; }
+
+        [StringLength(2000, ErrorMessage = "English detailed description can be at most 2000 characters")]
+        public string? DetailedDescriptionEn { get; set; }
 
         [StringLength(50, ErrorMessage = "Model numarası en fazla 50 karakter olabilir")]
         public string? ModelNumber { get; set; }
@@ -51,6 +60,9 @@ namespace InsaatFirmasi.Models
 
         [StringLength(1000, ErrorMessage = "Özellikler en fazla 1000 karakter olabilir")]
         public string? Features { get; set; }
+
+        [StringLength(1000, ErrorMessage = "English features can be at most 1000 characters")]
+        public string? FeaturesEn { get; set; }
 
         [StringLength(200, ErrorMessage = "Etiketler en fazla 200 karakter olabilir")]
         public string? Tags { get; set; }

@@ -9,26 +9,50 @@ namespace InsaatFirmasi.Models
         [StringLength(200)]
         public string? Title { get; set; }
 
+        [StringLength(200)]
+        public string? TitleEn { get; set; }
+
         [StringLength(500)]
         public string? Subtitle { get; set; }
+
+        [StringLength(500)]
+        public string? SubtitleEn { get; set; }
 
         [StringLength(150)]
         public string? Item1Title { get; set; }
 
+        [StringLength(150)]
+        public string? Item1TitleEn { get; set; }
+
         [StringLength(300)]
         public string? Item1Text { get; set; }
+
+        [StringLength(300)]
+        public string? Item1TextEn { get; set; }
 
         [StringLength(150)]
         public string? Item2Title { get; set; }
 
+        [StringLength(150)]
+        public string? Item2TitleEn { get; set; }
+
         [StringLength(300)]
         public string? Item2Text { get; set; }
+
+        [StringLength(300)]
+        public string? Item2TextEn { get; set; }
 
         [StringLength(150)]
         public string? Item3Title { get; set; }
 
         [StringLength(300)]
         public string? Item3Text { get; set; }
+
+        [StringLength(150)]
+        public string? Item3TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? Item3TextEn { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
     }

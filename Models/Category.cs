@@ -10,8 +10,14 @@ namespace InsaatFirmasi.Models
         [StringLength(100, ErrorMessage = "Kategori adı en fazla 100 karakter olabilir")]
         public string Name { get; set; } = string.Empty;
 
+        [StringLength(100, ErrorMessage = "English category name can be at most 100 characters")]
+        public string? NameEn { get; set; }
+
         [StringLength(500, ErrorMessage = "Açıklama en fazla 500 karakter olabilir")]
         public string? Description { get; set; }
+
+        [StringLength(500, ErrorMessage = "English description can be at most 500 characters")]
+        public string? DescriptionEn { get; set; }
 
         [StringLength(200, ErrorMessage = "Resim yolu en fazla 200 karakter olabilir")]
         public string? ImagePath { get; set; }

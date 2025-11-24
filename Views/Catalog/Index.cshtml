@@ -34,6 +34,13 @@
             <div class="row g-4 product-groups-grid">
                 @foreach (var catalog in Model)
                 {
+                    var title = currentLang == "en" && !string.IsNullOrEmpty(catalog.TitleEn)
+                        ? catalog.TitleEn
+                        : (string.IsNullOrEmpty(catalog.Title) ? catalog.Name : catalog.Title);
+                    var desc = currentLang == "en" && !string.IsNullOrEmpty(catalog.DescriptionEn)
+                        ? catalog.DescriptionEn
+                        : catalog.Description;
+
                     <div class="col-lg-4 col-md-6">
                         <article class="product-group-card catalog-card">
                             <div class="product-group-image">
@@ -61,11 +68,11 @@
                                         <i class="fas fa-weight me-1"></i>@catalog.FileSize
                                     </span>
                                 </div>
-                                <h3 class="catalog-card-title">@catalog.Title</h3>
+                                <h3 class="catalog-card-title">@title</h3>
                                 <p class="catalog-card-excerpt">
-                                    @(catalog.Description != null && catalog.Description.Length > 140
-                                        ? catalog.Description.Substring(0, 140) + "..."
-                                        : catalog.Description)
+                                    @(desc != null && desc.Length > 140
+                                        ? desc.Substring(0, 140) + "..."
+                                        : desc)
                                 </p>
                                 <div class="catalog-card-footer">
                                     <span class="catalog-card-downloads">

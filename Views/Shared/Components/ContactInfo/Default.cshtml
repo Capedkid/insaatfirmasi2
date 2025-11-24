@@ -1,7 +1,10 @@
 @model InsaatFirmasi.Models.ContactInfo
+@{
+    var currentLang = ViewContext.HttpContext.Request.Cookies["lang"] as string ?? "tr";
+}
 
 <div class="col-md-3">
-    <h6 class="footer-heading">İletişim</h6>
+    <h6 class="footer-heading">@(currentLang == "en" ? "Contact" : "İletişim")</h6>
     <ul class="footer-contact">
         @if (!string.IsNullOrEmpty(Model?.Phone))
         {

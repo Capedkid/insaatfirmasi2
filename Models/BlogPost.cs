@@ -10,11 +10,19 @@ namespace InsaatFirmasi.Models
         [StringLength(200, ErrorMessage = "Başlık en fazla 200 karakter olabilir")]
         public string Title { get; set; } = string.Empty;
 
+        [StringLength(200, ErrorMessage = "English title can be at most 200 characters")]
+        public string? TitleEn { get; set; }
+
         [StringLength(500, ErrorMessage = "Özet en fazla 500 karakter olabilir")]
         public string? Summary { get; set; }
 
+        [StringLength(500, ErrorMessage = "English summary can be at most 500 characters")]
+        public string? SummaryEn { get; set; }
+
         [Required(ErrorMessage = "İçerik zorunludur")]
         public string Content { get; set; } = string.Empty;
+
+        public string? ContentEn { get; set; }
 
         [StringLength(200, ErrorMessage = "Resim yolu en fazla 200 karakter olabilir")]
         public string? ImagePath { get; set; }

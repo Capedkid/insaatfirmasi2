@@ -69,9 +69,16 @@
                                             </span>
                                         }
                                     </div>
-                                    <h3 class="blog-card-title">@post.Title</h3>
+                                    <h3 class="blog-card-title">
+                                        @(currentLang == "en" && !string.IsNullOrEmpty(post.TitleEn) ? post.TitleEn : post.Title)
+                                    </h3>
                                     <p class="blog-card-excerpt">
-                                        @(post.Summary != null && post.Summary.Length > 140 ? post.Summary.Substring(0, 140) + "..." : post.Summary)
+                                        @{
+                                            var summary = currentLang == "en" && !string.IsNullOrEmpty(post.SummaryEn)
+                                                ? post.SummaryEn
+                                                : post.Summary;
+                                        }
+                                        @(summary != null && summary.Length > 140 ? summary.Substring(0, 140) + "..." : summary)
                                     </p>
                                     <div class="blog-card-footer">
                                         <span class="blog-card-readtime">

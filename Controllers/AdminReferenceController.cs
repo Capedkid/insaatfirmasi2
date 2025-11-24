@@ -175,13 +175,21 @@ public class AdminReferenceController : Controller
         else
         {
             existing.Title = content.Title;
+            existing.TitleEn = content.TitleEn;
             existing.Subtitle = content.Subtitle;
+            existing.SubtitleEn = content.SubtitleEn;
             existing.Item1Title = content.Item1Title;
+            existing.Item1TitleEn = content.Item1TitleEn;
             existing.Item1Text = content.Item1Text;
+            existing.Item1TextEn = content.Item1TextEn;
             existing.Item2Title = content.Item2Title;
+            existing.Item2TitleEn = content.Item2TitleEn;
             existing.Item2Text = content.Item2Text;
+            existing.Item2TextEn = content.Item2TextEn;
             existing.Item3Title = content.Item3Title;
+            existing.Item3TitleEn = content.Item3TitleEn;
             existing.Item3Text = content.Item3Text;
+            existing.Item3TextEn = content.Item3TextEn;
             existing.UpdatedDate = DateTime.Now;
         }
 

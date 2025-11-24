@@ -10,11 +10,20 @@ namespace InsaatFirmasi.Models
         [StringLength(200)]
         public string? HistoryTitle { get; set; }
 
+        [StringLength(200)]
+        public string? HistoryTitleEn { get; set; }
+
         [StringLength(800)]
         public string? HistoryText1 { get; set; }
 
         [StringLength(800)]
         public string? HistoryText2 { get; set; }
+
+        [StringLength(800)]
+        public string? HistoryText1En { get; set; }
+
+        [StringLength(800)]
+        public string? HistoryText2En { get; set; }
 
         // Tarihçemiz yanındaki 4 kart
         [StringLength(150)]
@@ -24,10 +33,22 @@ namespace InsaatFirmasi.Models
         public string? HistoryItem1Text { get; set; }
 
         [StringLength(150)]
+        public string? HistoryItem1TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? HistoryItem1TextEn { get; set; }
+
+        [StringLength(150)]
         public string? HistoryItem2Title { get; set; }
 
         [StringLength(300)]
         public string? HistoryItem2Text { get; set; }
+
+        [StringLength(150)]
+        public string? HistoryItem2TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? HistoryItem2TextEn { get; set; }
 
         [StringLength(150)]
         public string? HistoryItem3Title { get; set; }
@@ -36,10 +57,22 @@ namespace InsaatFirmasi.Models
         public string? HistoryItem3Text { get; set; }
 
         [StringLength(150)]
+        public string? HistoryItem3TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? HistoryItem3TextEn { get; set; }
+
+        [StringLength(150)]
         public string? HistoryItem4Title { get; set; }
 
         [StringLength(300)]
         public string? HistoryItem4Text { get; set; }
+
+        [StringLength(150)]
+        public string? HistoryItem4TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? HistoryItem4TextEn { get; set; }
 
         // Misyon / Vizyon
         [StringLength(200)]
@@ -49,10 +82,22 @@ namespace InsaatFirmasi.Models
         public string? MissionText { get; set; }
 
         [StringLength(200)]
+        public string? MissionTitleEn { get; set; }
+
+        [StringLength(800)]
+        public string? MissionTextEn { get; set; }
+
+        [StringLength(200)]
         public string? VisionTitle { get; set; }
 
         [StringLength(800)]
         public string? VisionText { get; set; }
+
+        [StringLength(200)]
+        public string? VisionTitleEn { get; set; }
+
+        [StringLength(800)]
+        public string? VisionTextEn { get; set; }
 
         // Değerler bölümü
         [StringLength(200)]
@@ -61,11 +106,23 @@ namespace InsaatFirmasi.Models
         [StringLength(500)]
         public string? ValuesSubtitle { get; set; }
 
+        [StringLength(200)]
+        public string? ValuesTitleEn { get; set; }
+
+        [StringLength(500)]
+        public string? ValuesSubtitleEn { get; set; }
+
         [StringLength(150)]
         public string? Value1Title { get; set; }
 
         [StringLength(300)]
         public string? Value1Text { get; set; }
+
+        [StringLength(150)]
+        public string? Value1TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? Value1TextEn { get; set; }
 
         [StringLength(150)]
         public string? Value2Title { get; set; }
@@ -74,16 +131,34 @@ namespace InsaatFirmasi.Models
         public string? Value2Text { get; set; }
 
         [StringLength(150)]
+        public string? Value2TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? Value2TextEn { get; set; }
+
+        [StringLength(150)]
         public string? Value3Title { get; set; }
 
         [StringLength(300)]
         public string? Value3Text { get; set; }
 
         [StringLength(150)]
+        public string? Value3TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? Value3TextEn { get; set; }
+
+        [StringLength(150)]
         public string? Value4Title { get; set; }
 
         [StringLength(300)]
         public string? Value4Text { get; set; }
+
+        [StringLength(150)]
+        public string? Value4TitleEn { get; set; }
+
+        [StringLength(300)]
+        public string? Value4TextEn { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
     }

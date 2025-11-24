@@ -1,13 +1,21 @@
 @model InsaatFirmasi.Models.Product
 @{
-    var seoTitle = !string.IsNullOrEmpty(Model.SeoTitle) ? Model.SeoTitle : Model.Name;
-    var baseDescription = Model.SeoDescription ?? Model.Description;
+    var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
+    var displayName = currentLang == "en" && !string.IsNullOrEmpty(Model.NameEn)
+        ? Model.NameEn
+        : Model.Name;
+    var displayDescription = currentLang == "en" && !string.IsNullOrEmpty(Model.DescriptionEn)
+        ? Model.DescriptionEn
+        : Model.Description;
+
+    var seoTitle = !string.IsNullOrEmpty(Model.SeoTitle) ? Model.SeoTitle : displayName;
+    var baseDescription = Model.SeoDescription ?? displayDescription;
     var description = baseDescription != null && baseDescription.Length > 160
         ? baseDescription.Substring(0, 160) + "..."
         : baseDescription;
     var keywords = !string.IsNullOrEmpty(Model.SeoKeywords)
         ? Model.SeoKeywords
-        : $"{Model.Name}, {Model.Category?.Name}, inşaat malzemeleri, {Model.Tags}";
+        : $"{displayName}, {Model.Category?.Name}, inşaat malzemeleri, {Model.Tags}";
 
     ViewData["Title"] = seoTitle;
     ViewData["Description"] = description;
@@ -19,7 +27,14 @@
 <!-- SAYFA HERO (site tasarımı ile uyumlu) -->
 <section class="page-hero page-hero-simple">
     <div class="container-xl text-center">
-        <h1 class="page-hero-title">@Model.Category?.Name ?? @Model.Name</h1>
+        <h1 class="page-hero-title">
+            @{
+                var categoryName = Model.Category != null && currentLang == "en" && !string.IsNullOrEmpty(Model.Category.NameEn)
+                    ? Model.Category.NameEn
+                    : Model.Category?.Name;
+            }
+            @categoryName ?? displayName
+        </h1>
     </div>
 </section>
 
@@ -50,11 +65,11 @@
             <!-- Ürün Adı ve Açıklama / Stok Bilgisi -->
             <div class="col-lg-6">
                 <div class="product-info">
-                    <h1 class="display-5 fw-bold text-dark mb-3">@Model.Name</h1>
-                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    <h1 class="display-5 fw-bold text-dark mb-3">@displayName</h1>
+                    @if (!string.IsNullOrWhiteSpace(displayDescription))
                     {
                         <p class="lead text-muted mb-3">
-                            @Model.Description
+                            @displayDescription
                         </p>
                     }
 

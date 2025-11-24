@@ -434,22 +434,26 @@
                     <span class="home-section-kicker">
                         @(currentLang == "en" ? "About Us" : "Hakkımızda")
                     </span>
-                    <h2 class="home-section-title">
-                        @(
-                            aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Title)
-                                ? aboutContent.Title
-                                : currentLang == "en"
-                                    ? "A reliable manufacturer in plastic construction solutions"
-                                    : "Plastik inşaat çözümlerinde güvenilir üretici"
-                        )
-                    </h2>
+                        <h2 class="home-section-title">
+                            @(
+                                currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.TitleEn)
+                                    ? aboutContent.TitleEn
+                                    : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Title)
+                                        ? aboutContent.Title
+                                        : currentLang == "en"
+                                            ? "A reliable manufacturer in plastic construction solutions"
+                                            : "Plastik inşaat çözümlerinde güvenilir üretici"
+                            )
+                        </h2>
                     <p class="home-section-text">
                         @(
-                            aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Subtitle)
-                                ? aboutContent.Subtitle
-                                : currentLang == "en"
-                                    ? "Since 1995, we have been producing drainage channels, manhole chambers and wet area products to provide long-lasting solutions for your infrastructure and superstructure projects. With our modern production line and design-oriented approach, we take plastic construction materials to the next level."
-                                    : "1995 yılından bugüne drenaj kanalları, rögar menhol kutuları ve ıslak zemin ürünleri üreterek altyapı ve üstyapı projelerine uzun ömürlü çözümler sunuyoruz. Modern üretim hattımız ve tasarım odaklı yaklaşımımızla plastik inşaat malzemelerini bir üst seviyeye taşıyoruz."
+                            currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.SubtitleEn)
+                                ? aboutContent.SubtitleEn
+                                : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Subtitle)
+                                    ? aboutContent.Subtitle
+                                    : currentLang == "en"
+                                        ? "Since 1995, we have been producing drainage channels, manhole chambers and wet area products to provide long-lasting solutions for your infrastructure and superstructure projects. With our modern production line and design-oriented approach, we take plastic construction materials to the next level."
+                                        : "1995 yılından bugüne drenaj kanalları, rögar menhol kutuları ve ıslak zemin ürünleri üreterek altyapı ve üstyapı projelerine uzun ömürlü çözümler sunuyoruz. Modern üretim hattımız ve tasarım odaklı yaklaşımımızla plastik inşaat malzemelerini bir üst seviyeye taşıyoruz."
                         )
                     </p>
                     <div class="about-highlights">
@@ -458,20 +462,24 @@
                             <div>
                                 <strong>
                                     @(
-                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item1Title)
-                                            ? aboutContent.Item1Title
-                                            : currentLang == "en"
-                                                ? "25+ years of experience"
-                                                : "25+ yıllık tecrübe"
+                                        currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item1TitleEn)
+                                            ? aboutContent.Item1TitleEn
+                                            : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item1Title)
+                                                ? aboutContent.Item1Title
+                                                : currentLang == "en"
+                                                    ? "25+ years of experience"
+                                                    : "25+ yıllık tecrübe"
                                     )
                                 </strong>
                                 <span>
                                     @(
-                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item1Text)
-                                            ? aboutContent.Item1Text
-                                            : currentLang == "en"
-                                                ? "A trusted brand in infrastructure and wet area projects."
-                                                : "Altyapı ve ıslak zemin projelerinde güvenilen marka."
+                                        currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item1TextEn)
+                                            ? aboutContent.Item1TextEn
+                                            : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item1Text)
+                                                ? aboutContent.Item1Text
+                                                : currentLang == "en"
+                                                    ? "A trusted brand in infrastructure and wet area projects."
+                                                    : "Altyapı ve ıslak zemin projelerinde güvenilen marka."
                                     )
                                 </span>
                             </div>
@@ -481,20 +489,24 @@
                             <div>
                                 <strong>
                                     @(
-                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item2Title)
-                                            ? aboutContent.Item2Title
-                                            : currentLang == "en"
-                                                ? "Strong production infrastructure"
-                                                : "Güçlü üretim altyapısı"
+                                        currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item2TitleEn)
+                                            ? aboutContent.Item2TitleEn
+                                            : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item2Title)
+                                                ? aboutContent.Item2Title
+                                                : currentLang == "en"
+                                                    ? "Strong production infrastructure"
+                                                    : "Güçlü üretim altyapısı"
                                     )
                                 </strong>
                                 <span>
                                     @(
-                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item2Text)
-                                            ? aboutContent.Item2Text
-                                            : currentLang == "en"
-                                                ? "High-capacity injection line and modern mould shop."
-                                                : "Yüksek kapasiteli enjeksiyon hattı ve modern kalıphane."
+                                        currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item2TextEn)
+                                            ? aboutContent.Item2TextEn
+                                            : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item2Text)
+                                                ? aboutContent.Item2Text
+                                                : currentLang == "en"
+                                                    ? "High-capacity injection line and modern mould shop."
+                                                    : "Yüksek kapasiteli enjeksiyon hattı ve modern kalıphane."
                                     )
                                 </span>
                             </div>
@@ -504,20 +516,24 @@
                             <div>
                                 <strong>
                                     @(
-                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item3Title)
-                                            ? aboutContent.Item3Title
-                                            : currentLang == "en"
-                                                ? "Project-specific solutions"
-                                                : "Projeye özel çözümler"
+                                        currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item3TitleEn)
+                                            ? aboutContent.Item3TitleEn
+                                            : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item3Title)
+                                                ? aboutContent.Item3Title
+                                                : currentLang == "en"
+                                                    ? "Project-specific solutions"
+                                                    : "Projeye özel çözümler"
                                     )
                                 </strong>
                                 <span>
                                     @(
-                                        aboutContent != null && currentLang == "tr" && !string.IsNullOrEmpty(aboutContent.Item3Text)
-                                            ? aboutContent.Item3Text
-                                            : currentLang == "en"
-                                                ? "Custom products and project support for your needs."
-                                                : "Müşteriye özel ürün ve proje desteği."
+                                        currentLang == "en" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item3TextEn)
+                                            ? aboutContent.Item3TextEn
+                                            : currentLang == "tr" && aboutContent != null && !string.IsNullOrEmpty(aboutContent.Item3Text)
+                                                ? aboutContent.Item3Text
+                                                : currentLang == "en"
+                                                    ? "Custom products and project support for your needs."
+                                                    : "Müşteriye özel ürün ve proje desteği."
                                     )
                                 </span>
                             </div>
@@ -587,20 +603,24 @@
                         </span>
                         <h2 class="home-section-title">
                             @(
-                                referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Title)
-                                    ? referenceContent.Title
-                                    : currentLang == "en"
-                                        ? "Brands that trust our plastic construction solutions"
-                                        : "Plastik inşaat çözümlerimize güvenen markalar"
+                                currentLang == "en" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.TitleEn)
+                                    ? referenceContent.TitleEn
+                                    : currentLang == "tr" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Title)
+                                        ? referenceContent.Title
+                                        : currentLang == "en"
+                                            ? "Brands that trust our plastic construction solutions"
+                                            : "Plastik inşaat çözümlerimize güvenen markalar"
                             )
                         </h2>
                         <p class="home-section-text">
                             @(
-                                referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Subtitle)
-                                    ? referenceContent.Subtitle
-                                    : currentLang == "en"
-                                        ? "We work with many brands and projects in infrastructure, drainage channels, manhole chambers and wet area applications."
-                                        : "Altyapı, drenaj kanalları, rögar menhol kutuları ve ıslak zemin uygulamalarında birçok marka ve projeyle birlikte çalışıyoruz."
+                                currentLang == "en" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.SubtitleEn)
+                                    ? referenceContent.SubtitleEn
+                                    : currentLang == "tr" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Subtitle)
+                                        ? referenceContent.Subtitle
+                                        : currentLang == "en"
+                                            ? "We work with many brands and projects in infrastructure, drainage channels, manhole chambers and wet area applications."
+                                            : "Altyapı, drenaj kanalları, rögar menhol kutuları ve ıslak zemin uygulamalarında birçok marka ve projeyle birlikte çalışıyoruz."
                             )
                         </p>
                         <div class="about-highlights">
@@ -609,20 +629,24 @@
                                 <div>
                                 <strong>
                                     @(
-                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item1Title)
-                                            ? referenceContent.Item1Title
-                                            : currentLang == "en"
-                                                ? "Long-term collaborations"
-                                                : "Uzun soluklu iş birlikleri"
+                                        currentLang == "en" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item1TitleEn)
+                                            ? referenceContent.Item1TitleEn
+                                            : currentLang == "tr" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item1Title)
+                                                ? referenceContent.Item1Title
+                                                : currentLang == "en"
+                                                    ? "Long-term collaborations"
+                                                    : "Uzun soluklu iş birlikleri"
                                     )
                                 </strong>
                                 <span>
                                     @(
-                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item1Text)
-                                            ? referenceContent.Item1Text
-                                            : currentLang == "en"
-                                                ? "We establish long-term partnerships with our references based on trust and continuity."
-                                                : "Referanslarımızla güven ve sürdürülebilirlik esaslı uzun vadeli iş ortaklıkları kuruyoruz."
+                                        currentLang == "en" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item1TextEn)
+                                            ? referenceContent.Item1TextEn
+                                            : currentLang == "tr" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item1Text)
+                                                ? referenceContent.Item1Text
+                                                : currentLang == "en"
+                                                    ? "We establish long-term partnerships with our references based on trust and continuity."
+                                                    : "Referanslarımızla güven ve sürdürülebilirlik esaslı uzun vadeli iş ortaklıkları kuruyoruz."
                                     )
                                 </span>
                                 </div>
@@ -632,20 +656,24 @@
                                 <div>
                                 <strong>
                                     @(
-                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item2Title)
-                                            ? referenceContent.Item2Title
-                                            : currentLang == "en"
-                                                ? "Different sectors"
-                                                : "Farklı sektörler"
+                                        currentLang == "en" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item2TitleEn)
+                                            ? referenceContent.Item2TitleEn
+                                            : currentLang == "tr" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item2Title)
+                                                ? referenceContent.Item2Title
+                                                : currentLang == "en"
+                                                    ? "Different sectors"
+                                                    : "Farklı sektörler"
                                     )
                                 </strong>
                                 <span>
                                     @(
-                                        referenceContent != null && currentLang == "tr" && !string.IsNullOrEmpty(referenceContent.Item2Text)
-                                            ? referenceContent.Item2Text
-                                            : currentLang == "en"
-                                                ? "From industrial facilities to public projects, we are involved in many different fields."
-                                                : "Endüstriyel tesislerden kamu projelerine kadar birçok farklı alanda yer alıyoruz."
+                                        currentLang == "en" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item2TextEn)
+                                            ? referenceContent.Item2TextEn
+                                            : currentLang == "tr" && referenceContent != null && !string.IsNullOrEmpty(referenceContent.Item2Text)
+                                                ? referenceContent.Item2Text
+                                                : currentLang == "en"
+                                                    ? "From industrial facilities to public projects, we are involved in many different fields."
+                                                    : "Endüstriyel tesislerden kamu projelerine kadar birçok farklı alanda yer alıyoruz."
                                     )
                                 </span>
                                 </div>

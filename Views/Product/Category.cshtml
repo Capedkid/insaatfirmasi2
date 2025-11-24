@@ -4,20 +4,23 @@
     var currentLang = Context.Request.Cookies["lang"] as string ?? "tr";
 
     var category = ViewBag.Category as Category;
-    var defaultTitle = category != null
-        ? (currentLang == "en" ? category.Name + " Products" : category.Name + " Ürünleri")
+    var categoryName = category != null
+        ? (currentLang == "en" && !string.IsNullOrEmpty(category.NameEn) ? category.NameEn : category.Name)
+        : null;
+    var defaultTitle = categoryName != null
+        ? (currentLang == "en" ? categoryName + " Products" : categoryName + " Ürünleri")
         : (currentLang == "en" ? "Products" : "Ürünler");
     var seoTitle = category != null && !string.IsNullOrEmpty(category.SeoTitle)
         ? category.SeoTitle
         : defaultTitle;
     var description = category?.SeoDescription
         ?? (currentLang == "en"
-            ? $"Category: {category?.Name} products"
-            : $"Kategori: {category?.Name} ürünleri");
+            ? $"Category: {categoryName} products"
+            : $"Kategori: {categoryName} ürünleri");
     var keywords = category?.SeoKeywords
         ?? (currentLang == "en"
-            ? $"{category?.Name}, products, construction, plastic solutions"
-            : $"{category?.Name}, ürünler, inşaat, plastik çözümler");
+            ? $"{categoryName}, products, construction, plastic solutions"
+            : $"{categoryName}, ürünler, inşaat, plastik çözümler");
 
     ViewData["Title"] = seoTitle;
     ViewData["Description"] = description;
@@ -30,9 +33,9 @@
 <section class="page-hero page-hero-simple">
     <div class="container-xl text-center">
         <h1 class="page-hero-title">
-            @if (category != null)
+            @if (categoryName != null)
             {
-                @(currentLang == "en" ? category.Name + " Products" : category.Name + " Ürünleri")
+                @(currentLang == "en" ? categoryName + " Products" : categoryName + " Ürünleri")
             }
             else
             {
@@ -49,11 +52,11 @@
                 @(currentLang == "en" ? "Products" : "Ürünler")
             </span>
             <h2 class="home-section-title">
-                @if (category != null)
+                @if (categoryName != null)
                 {
                     @(currentLang == "en"
-                        ? $"Products in {category.Name} category"
-                        : category.Name + " Kategorisindeki Ürünler")
+                        ? $"Products in {categoryName} category"
+                        : categoryName + " Kategorisindeki Ürünler")
                 }
                 else
                 {
@@ -69,6 +72,9 @@
             <div class="row g-4">
                 @foreach (var product in Model)
                 {
+                    var productName = currentLang == "en" && !string.IsNullOrEmpty(product.NameEn)
+                        ? product.NameEn
+                        : product.Name;
                     <div class="col-lg-4 col-md-6">
                         <a asp-controller="Product"
                            asp-action="Details"
@@ -78,7 +84,7 @@
                                 <div class="product-group-image">
                                     @if (!string.IsNullOrEmpty(product.MainImagePath))
                                     {
-                                        <img src="~/@product.MainImagePath" alt="@product.Name" />
+                                        <img src="~/@product.MainImagePath" alt="@productName" />
                                     }
                                     else
                                     {
@@ -87,7 +93,7 @@
                                         </div>
                                     }
                                 </div>
-                                <h3>@product.Name</h3>
+                                <h3>@productName</h3>
                             </div>
                         </a>
                     </div>
