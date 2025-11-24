@@ -17,7 +17,7 @@ public class ProductController : Controller
     }
 
     // Tüm ürünleri listele
-    public async Task<IActionResult> Index(int? categoryId, string? search)
+    public async Task<IActionResult> Index(int? categoryId, string? search, int page = 1, int pageSize = 12)
     {
         var query = _context.Products
             .Where(p => p.IsActive)
@@ -40,9 +40,16 @@ public class ProductController : Controller
                 (p.ModelNumber != null && p.ModelNumber.Contains(search)));
         }
 
-        var products = await query
+        var orderedQuery = query
             .OrderBy(p => p.SortOrder)
-            .ThenBy(p => p.Name)
+            .ThenBy(p => p.Name);
+
+        var totalCount = await orderedQuery.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var products = await orderedQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         var categories = await _context.Categories
@@ -54,6 +61,9 @@ public class ProductController : Controller
         ViewBag.Categories = categories;
         ViewBag.SelectedCategoryId = categoryId;
         ViewBag.SearchTerm = search;
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         // SEO
         if (selectedCategory != null)

@@ -71,7 +71,7 @@
                                     <th>Ürün Adı</th>
                                     <th>Kategori</th>
                                     <th>Stok</th>
-                                    <th style="width: 210px;"></th>
+                                    <th style="width: 260px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -103,6 +103,9 @@
                                             }
                                         </td>
                                         <td class="text-end">
+                                            <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-outline-light me-1">
+                                                <i class="fas fa-pen me-1"></i>Düzenle
+                                            </a>
                                             <form asp-action="ToggleStock" method="post" class="d-inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@product.Id" />
@@ -131,6 +134,46 @@
                                 }
                             </tbody>
                         </table>
+
+                        @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+                        {
+                            <nav aria-label="Ürün listesi sayfalama" class="mt-3">
+                                <ul class="pagination justify-content-end mb-0">
+                                    @if (ViewBag.CurrentPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               asp-action="Index"
+                                               asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                                Önceki
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                                    {
+                                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                            <a class="page-link"
+                                               asp-action="Index"
+                                               asp-route-page="@i">
+                                                @i
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               asp-action="Index"
+                                               asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                                Sonraki
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
                     }
                     else
                     {

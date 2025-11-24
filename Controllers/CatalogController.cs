@@ -17,17 +17,28 @@ public class CatalogController : Controller
     }
 
     // Tüm katalogları listele
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var catalogs = await _context.Catalogs
+        var query = _context.Catalogs
             .Where(c => c.IsActive)
-            .OrderByDescending(c => c.CreatedDate)
+            .OrderByDescending(c => c.CreatedDate);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var catalogs = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         // SEO
         ViewData["Title"] = "Online Kataloglar";
         ViewData["Description"] = "Drenaj sistemleri, rögar menhol kutuları ve ıslak zemin ürünleri için güncel PDF kataloglarını inceleyin ve indirin.";
         ViewData["Keywords"] = "online katalog,PDF katalog,drenaj sistemi kataloğu,rögar kataloğu,ıslak zemin kataloğu";
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(catalogs);
     }

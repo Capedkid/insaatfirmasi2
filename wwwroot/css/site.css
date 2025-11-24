@@ -1409,6 +1409,21 @@ body {
   color: #9ca3af;
 }
 
+.konap-brand-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.konap-letter {
+  display: inline-block;
+  color: #000000;
+}
+
+.konap-letter-accent {
+  color: #dc3545;
+}
+
 .main-nav {
   display: flex;
   align-items: center;

@@ -1,87 +1,62 @@
 @model IEnumerable<InsaatFirmasi.Models.SiteLogo>
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Firma Logosu ve Alt Sayfa Adı Yönetimi";
+    ViewData["Title"] = "Alt Sayfa Yönetimi";
     var footerText = ViewBag.FooterText as string ?? "İnşaat Plastik Çözümler";
+    var footerBrandTitle = ViewBag.FooterBrandTitle as string;
+    var footerBrandSubtitle = ViewBag.FooterBrandSubtitle as string;
+    var footerBrandDescription = ViewBag.FooterBrandDescription as string;
 }
 
 <section class="page-hero page-hero-simple">
     <div class="container-xl text-center">
-        <h1 class="page-hero-title">Firma Logosu ve Alt Sayfa Adı Yönetimi</h1>
+        <h1 class="page-hero-title">Alt Sayfa Yönetimi</h1>
     </div>
 </section>
 
 <section class="home-section admin-dashboard-section">
     <div class="container-xl">
         <div class="row g-4">
-            <div class="col-lg-5">
-                <div class="home-card admin-card">
-                    <h3 class="mb-3">Logo Ekle</h3>
+            <div class="col-lg-8">
+                <div class="home-card admin-card mb-4">
+                    <h3 class="mb-3">Footer Sol Alan Metni</h3>
                     <p class="home-section-text mb-3">
-                        Header'da gösterilecek firma logosunu buradan yükleyebilirsiniz. En son eklenen logo kullanılacaktır.
+                        Footer'ın sol tarafında görünen başlık, alt başlık ve açıklama metnini buradan güncelleyebilirsiniz.
+                        Boş bırakırsanız varsayılan statik metinler kullanılacaktır.
                     </p>
-                    <p class="small text-muted mb-3">
-                        Önerilen boyut: 160x40 piksel civarı, yatay logo. PNG veya SVG formatı idealdir. Arka planı şeffaf logo tercih edilir.
-                    </p>
-
-                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <form asp-action="UpdateFooterBrand" method="post">
                         @Html.AntiForgeryToken()
                         <div asp-validation-summary="All" class="text-danger small mb-2"></div>
-
                         <div class="mb-3">
-                            <label class="form-label">Logo Görseli</label>
-                            <input type="file" name="imageFile" class="form-control" accept="image/*" required />
-                            <small class="form-text text-muted">
-                                Önerilen boyut: yaklaşık 160x40 piksel (yatay logo). PNG formatında, tercihen şeffaf arkaplanlı bir logo yüklemeniz önerilir.
-                            </small>
+                            <label class="form-label">Başlık</label>
+                            <input type="text"
+                                   name="brandTitle"
+                                   class="form-control"
+                                   value="@footerBrandTitle"
+                                   maxlength="200"
+                                   placeholder="Örn: Drenaj, rögar ve ıslak zemin çözümleri" />
                         </div>
-
+                        <div class="mb-3">
+                            <label class="form-label">Alt Başlık</label>
+                            <input type="text"
+                                   name="brandSubtitle"
+                                   class="form-control"
+                                   value="@footerBrandSubtitle"
+                                   maxlength="200"
+                                   placeholder="Örn: Modern plastik inşaat malzemeleri" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Açıklama</label>
+                            <textarea name="brandDescription"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="500"
+                                      placeholder="Örn: Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz.">@footerBrandDescription</textarea>
+                        </div>
                         <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-upload me-2"></i>Logoyu Yükle
+                            <i class="fas fa-save me-2"></i>Footer Sol Metnini Güncelle
                         </button>
                     </form>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="home-card admin-card mb-4">
-                    <h3 class="mb-3">Yüklü Logolar</h3>
-                    @if (Model != null && Model.Any())
-                    {
-                        <p class="home-section-text mb-3">
-                            En üstteki logo header'da kullanılan logodur. En son yüklenen logo otomatik olarak kullanılacaktır.
-                        </p>
-                        <div class="row g-3">
-                            @foreach (var logo in Model)
-                            {
-                                <div class="col-md-6">
-                                    <div class="border rounded p-2 bg-light d-flex flex-column align-items-center justify-content-center" style="min-height:120px;">
-                                        <div class="mb-2">
-                                            <img src="~/@logo.ImagePath" alt="Site Logosu" style="max-height:50px; max-width:100%; object-fit:contain;" />
-                                        </div>
-                                        <div class="small text-muted">
-                                            @logo.CreatedDate.ToString("dd.MM.yyyy HH:mm")
-                                        </div>
-                                        <form asp-action="Delete" method="post" class="mt-2">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="id" value="@logo.Id" />
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Bu logoyu silmek istediğinize emin misiniz?');">
-                                                <i class="fas fa-trash-alt me-1"></i>Sil
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="home-section-text mb-0">
-                            Henüz logo yüklenmemiş. İlk logoyu eklediğinizde header'daki marka alanında bu logo görünecektir.
-                        </p>
-                    }
                 </div>
 
                 <div class="home-card admin-card">

@@ -25,11 +25,18 @@ public class AdminReferenceController : Controller
         _env = env;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var logos = await _context.ReferenceLogos
+        var query = _context.ReferenceLogos
             .OrderBy(r => r.SortOrder)
-            .ThenByDescending(r => r.CreatedDate)
+            .ThenByDescending(r => r.CreatedDate);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var logos = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         var content = await _context.ReferenceSectionContents.FirstOrDefaultAsync()
@@ -40,6 +47,10 @@ public class AdminReferenceController : Controller
             Logos = logos,
             Content = content
         };
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(vm);
     }

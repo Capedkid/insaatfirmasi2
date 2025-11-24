@@ -34,6 +34,16 @@ public class AdminLogoController : Controller
         return Path.Combine(settingsFolder, "footer-text.txt");
     }
 
+    private string GetFooterBrandFilePath()
+    {
+        var settingsFolder = Path.Combine(_env.WebRootPath, "uploads", "settings");
+        if (!Directory.Exists(settingsFolder))
+        {
+            Directory.CreateDirectory(settingsFolder);
+        }
+        return Path.Combine(settingsFolder, "footer-brand.txt");
+    }
+
     public async Task<IActionResult> Index()
     {
         var logos = await _context.SiteLogos
@@ -56,6 +66,25 @@ public class AdminLogoController : Controller
         catch
         {
             ViewBag.FooterText = "İnşaat Plastik Çözümler";
+        }
+
+        // Footer sol alan (başlık, alt başlık, açıklama)
+        try
+        {
+            var brandPath = GetFooterBrandFilePath();
+            if (System.IO.File.Exists(brandPath))
+            {
+                var lines = await System.IO.File.ReadAllLinesAsync(brandPath);
+                ViewBag.FooterBrandTitle = lines.Length > 0 ? lines[0] : null;
+                ViewBag.FooterBrandSubtitle = lines.Length > 1 ? lines[1] : null;
+                ViewBag.FooterBrandDescription = lines.Length > 2 ? lines[2] : null;
+            }
+        }
+        catch
+        {
+            ViewBag.FooterBrandTitle = null;
+            ViewBag.FooterBrandSubtitle = null;
+            ViewBag.FooterBrandDescription = null;
         }
 
         return View(logos);
@@ -168,6 +197,30 @@ public class AdminLogoController : Controller
         {
             _logger.LogError(ex, "Alt sayfa adı güncellenirken bir hata oluştu.");
             ModelState.AddModelError(string.Empty, "Alt sayfa adı kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateFooterBrand(string brandTitle, string brandSubtitle, string brandDescription)
+    {
+        try
+        {
+            var brandPath = GetFooterBrandFilePath();
+            var lines = new List<string>
+            {
+                brandTitle ?? string.Empty,
+                brandSubtitle ?? string.Empty,
+                brandDescription ?? string.Empty
+            };
+            await System.IO.File.WriteAllLinesAsync(brandPath, lines);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Footer sol alan metni güncellenirken bir hata oluştu.");
+            ModelState.AddModelError(string.Empty, "Footer sol metni kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
         }
 
         return RedirectToAction(nameof(Index));

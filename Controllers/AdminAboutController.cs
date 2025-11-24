@@ -27,11 +27,18 @@ public class AdminAboutController : Controller
         _env = env;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var images = await _context.AboutImages
+        var query = _context.AboutImages
             .OrderBy(a => a.SortOrder)
-            .ThenByDescending(a => a.CreatedDate)
+            .ThenByDescending(a => a.CreatedDate);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var images = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         var content = await _context.AboutSectionContents.FirstOrDefaultAsync()
@@ -42,6 +49,10 @@ public class AdminAboutController : Controller
             Images = images,
             Content = content
         };
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(vm);
     }

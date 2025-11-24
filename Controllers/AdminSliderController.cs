@@ -26,11 +26,22 @@ public class AdminSliderController : Controller
         _env = env;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var sliders = await _context.Sliders
-            .OrderByDescending(s => s.CreatedDate)
+        var query = _context.Sliders
+            .OrderByDescending(s => s.CreatedDate);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var sliders = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(sliders);
     }

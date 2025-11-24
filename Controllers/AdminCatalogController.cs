@@ -26,11 +26,22 @@ public class AdminCatalogController : Controller
         _env = env;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var catalogs = await _context.Catalogs
-            .OrderByDescending(c => c.CreatedDate)
+        var query = _context.Catalogs
+            .OrderByDescending(c => c.CreatedDate);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var catalogs = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(catalogs);
     }
@@ -42,6 +53,12 @@ public class AdminCatalogController : Controller
         if (file == null || file.Length == 0)
         {
             ModelState.AddModelError("FilePath", "Lütfen bir katalog dosyası (PDF vb.) yükleyin.");
+        }
+
+        // 50 MB sınırı
+        if (file != null && file.Length > 50 * 1024 * 1024)
+        {
+            ModelState.AddModelError("FilePath", "Katalog dosyası en fazla 50 MB olabilir.");
         }
 
         if (!ModelState.IsValid)

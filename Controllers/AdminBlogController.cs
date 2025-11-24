@@ -27,11 +27,22 @@ public class AdminBlogController : Controller
     }
 
     // Blog yazılarını listele ve yeni yazı formunu göster
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var posts = await _context.BlogPosts
-            .OrderByDescending(b => b.PublishedDate ?? b.CreatedDate)
+        var query = _context.BlogPosts
+            .OrderByDescending(b => b.PublishedDate ?? b.CreatedDate);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var posts = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(posts);
     }

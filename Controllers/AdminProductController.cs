@@ -26,12 +26,19 @@ public class AdminProductController : Controller
         _env = env;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var products = await _context.Products
+        var query = _context.Products
             .Include(p => p.Category)
             .OrderBy(p => p.SortOrder)
-            .ThenBy(p => p.Name)
+            .ThenBy(p => p.Name);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var products = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         var categories = await _context.Categories
@@ -41,6 +48,9 @@ public class AdminProductController : Controller
             .ToListAsync();
 
         ViewBag.Categories = categories;
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(products);
     }
@@ -130,6 +140,81 @@ public class AdminProductController : Controller
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        var categories = await _context.Categories
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.SortOrder)
+            .ThenBy(c => c.Name)
+            .ToListAsync();
+
+        ViewBag.Categories = categories;
+
+        return View(product);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Product updatedProduct, IFormFile? imageFile)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        var categories = await _context.Categories
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.SortOrder)
+            .ThenBy(c => c.Name)
+            .ToListAsync();
+
+        ViewBag.Categories = categories;
+
+        if (!categories.Any(c => c.Id == updatedProduct.CategoryId))
+        {
+            ModelState.AddModelError("CategoryId", "Lütfen bir kategori seçin.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(product);
+        }
+
+        product.Name = updatedProduct.Name;
+        product.Description = updatedProduct.Description;
+        product.CategoryId = updatedProduct.CategoryId;
+
+        if (imageFile != null && imageFile.Length > 0)
+        {
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "products");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(imageFile.FileName)}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            product.MainImagePath = Path.Combine("uploads", "products", uniqueFileName).Replace("\\", "/");
+        }
+
+        await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));
     }

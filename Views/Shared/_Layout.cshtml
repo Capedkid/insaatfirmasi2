@@ -6,6 +6,10 @@
     var siteBaseUrl = request != null ? $"{request.Scheme}://{request.Host}" : "";
 
     var footerText = "İnşaat Plastik Çözümler";
+    string? footerBrandTitleOverride = null;
+    string? footerBrandSubtitleOverride = null;
+    string? footerBrandDescriptionOverride = null;
+
     try
     {
         var settingsFolder = System.IO.Path.Combine(Env.WebRootPath, "uploads", "settings");
@@ -13,6 +17,15 @@
         if (System.IO.File.Exists(footerPath))
         {
             footerText = System.IO.File.ReadAllText(footerPath);
+        }
+
+        var footerBrandPath = System.IO.Path.Combine(settingsFolder, "footer-brand.txt");
+        if (System.IO.File.Exists(footerBrandPath))
+        {
+            var lines = System.IO.File.ReadAllLines(footerBrandPath);
+            footerBrandTitleOverride = lines.Length > 0 ? lines[0] : null;
+            footerBrandSubtitleOverride = lines.Length > 1 ? lines[1] : null;
+            footerBrandDescriptionOverride = lines.Length > 2 ? lines[2] : null;
         }
     }
     catch
@@ -132,19 +145,33 @@
                         <span class="brand-mark small"></span>
                         <div>
                             <div class="footer-brand-title">
-                                @(currentLang == "en" ? "Construction Plastic Solutions" : "İnşaat Plastik Çözümler")
+                                @(
+                                    !string.IsNullOrWhiteSpace(footerBrandTitleOverride)
+                                        ? footerBrandTitleOverride
+                                        : currentLang == "en"
+                                            ? "Construction Plastic Solutions"
+                                            : "İnşaat Plastik Çözümler"
+                                 )
                             </div>
                             <div class="footer-brand-subtitle">
-                                @(currentLang == "en"
-                                    ? "Drainage, manhole and wet area products"
-                                    : "Drenaj, rögar ve ıslak zemin ürünleri")
+                                @(
+                                    !string.IsNullOrWhiteSpace(footerBrandSubtitleOverride)
+                                        ? footerBrandSubtitleOverride
+                                        : currentLang == "en"
+                                            ? "Drainage, manhole and wet area products"
+                                            : "Drenaj, rögar ve ıslak zemin ürünleri"
+                                 )
                             </div>
                         </div>
                     </div>
                     <p class="footer-text">
-                        @(currentLang == "en"
-                            ? "We provide long-lasting solutions for your infrastructure and superstructure projects with modern plastic construction materials."
-                            : "Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz.")
+                        @(
+                            !string.IsNullOrWhiteSpace(footerBrandDescriptionOverride)
+                                ? footerBrandDescriptionOverride
+                                : currentLang == "en"
+                                    ? "We provide long-lasting solutions for your infrastructure and superstructure projects with modern plastic construction materials."
+                                    : "Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz."
+                         )
                     </p>
                 </div>
                 <div class="col-md-3">

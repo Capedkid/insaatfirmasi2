@@ -26,12 +26,23 @@ public class AdminCategoryController : Controller
         _env = env;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
-        var categories = await _context.Categories
+        var query = _context.Categories
             .OrderBy(c => c.SortOrder)
-            .ThenBy(c => c.Name)
+            .ThenBy(c => c.Name);
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        var categories = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.TotalCount = totalCount;
 
         return View(categories);
     }

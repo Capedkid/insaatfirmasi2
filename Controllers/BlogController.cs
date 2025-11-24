@@ -17,7 +17,7 @@ public class BlogController : Controller
     }
 
     // Tüm blog yazılarını listele
-    public async Task<IActionResult> Index(int page = 1, int pageSize = 6)
+    public async Task<IActionResult> Index(int page = 1, int pageSize = 12)
     {
         var query = _context.BlogPosts
             .Where(b => b.IsActive && b.PublishedDate.HasValue)
