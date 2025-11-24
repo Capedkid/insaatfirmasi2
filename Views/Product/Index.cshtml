@@ -12,6 +12,14 @@
         : "ürün grupları, drenaj, rögar, ıslak zemin, plastik inşaat ürünleri";
 
     var categories = ViewBag.Categories as List<Category> ?? new List<Category>();
+    var pageSize = 12;
+    var currentPage = ViewBag.CurrentPage is int cp && cp > 0 ? cp : 1;
+    var totalCategories = categories.Count;
+    var totalPages = (int)Math.Ceiling((double)totalCategories / pageSize);
+    var pagedCategories = categories
+        .Skip((currentPage - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
 }
 
 <!-- SAYFA HERO -->
@@ -35,7 +43,7 @@
         @if (categories.Any())
         {
             <div class="row g-4">
-                @foreach (var category in categories)
+                @foreach (var category in pagedCategories)
                 {
                     <div class="col-lg-4 col-md-6">
                         <a asp-controller="Product" asp-action="Category" asp-route-id="@category.Id" class="text-decoration-none text-reset">
@@ -63,24 +71,24 @@
                 }
             </div>
 
-            @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+            @if (totalPages > 1)
             {
                 <nav aria-label="Ürün grupları sayfalama" class="mt-4">
                     <ul class="pagination justify-content-center">
-                        @if (ViewBag.CurrentPage > 1)
+                        @if (currentPage > 1)
                         {
                             <li class="page-item">
                                 <a class="page-link"
                                    asp-action="Index"
-                                   asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                   asp-route-page="@(currentPage - 1)">
                                     Önceki
                                 </a>
                             </li>
                         }
 
-                        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                        @for (int i = 1; i <= totalPages; i++)
                         {
-                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <li class="page-item @(i == currentPage ? "active" : "")">
                                 <a class="page-link"
                                    asp-action="Index"
                                    asp-route-page="@i">
@@ -89,12 +97,12 @@
                             </li>
                         }
 
-                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                        @if (currentPage < totalPages)
                         {
                             <li class="page-item">
                                 <a class="page-link"
                                    asp-action="Index"
-                                   asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                   asp-route-page="@(currentPage + 1)">
                                     Sonraki
                                 </a>
                             </li>

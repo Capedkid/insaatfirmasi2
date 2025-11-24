@@ -9,6 +9,8 @@
     string? footerBrandTitleOverride = null;
     string? footerBrandSubtitleOverride = null;
     string? footerBrandDescriptionOverride = null;
+    string? siteDescriptionOverride = null;
+    string? faviconPath = null;
 
     try
     {
@@ -27,11 +29,31 @@
             footerBrandSubtitleOverride = lines.Length > 1 ? lines[1] : null;
             footerBrandDescriptionOverride = lines.Length > 2 ? lines[2] : null;
         }
+
+        var descPath = System.IO.Path.Combine(settingsFolder, "site-description.txt");
+        if (System.IO.File.Exists(descPath))
+        {
+            siteDescriptionOverride = System.IO.File.ReadAllText(descPath);
+        }
+
+        var faviconRelative = "uploads/settings/favicon.ico";
+        var faviconPhysical = System.IO.Path.Combine(Env.WebRootPath, faviconRelative.Replace("/", System.IO.Path.DirectorySeparatorChar.ToString()));
+        if (System.IO.File.Exists(faviconPhysical))
+        {
+            faviconPath = "~/" + faviconRelative;
+        }
     }
     catch
     {
         footerText = "İnşaat Plastik Çözümler";
     }
+
+    var viewDescription = ViewData["Description"] as string;
+    var metaDescription = !string.IsNullOrWhiteSpace(viewDescription)
+        ? viewDescription
+        : !string.IsNullOrWhiteSpace(siteDescriptionOverride)
+            ? siteDescriptionOverride
+            : "Plastik drenaj kanalları, rögar menhol kutuları ve ıslak zemin çözümleri üreten modern inşaat firması.";
 }
 <!DOCTYPE html>
 <html lang="@currentLang">
@@ -39,16 +61,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@(ViewData["Title"] ?? "İnşaat Plastik Çözümler") - Konap</title>
-    <meta name="description" content="@(ViewData["Description"] ?? "Plastik drenaj kanalları, rögar menhol kutuları ve ıslak zemin çözümleri üreten modern inşaat firması.")" />
+    <meta name="description" content="@metaDescription" />
     <meta name="keywords" content="@(ViewData["Keywords"] ?? "plastik drenaj kanalı,rögar kutusu,menhol kutusu,ıslak zemin,plastik ızgara,inşaat plastik çözümler")" />
     <link rel="canonical" href="@currentUrl" />
     <meta property="og:title" content="@(ViewData["OgTitle"] ?? ViewData["Title"] ?? "İnşaat Firması")" />
-    <meta property="og:description" content="@(ViewData["OgDescription"] ?? ViewData["Description"] ?? "Plastik drenaj, rögar ve ıslak zemin çözümleri")" />
+    <meta property="og:description" content="@(ViewData["OgDescription"] ?? metaDescription ?? "Plastik drenaj, rögar ve ıslak zemin çözümleri")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@currentUrl" />
     @if (ViewData["OgImage"] is string ogImage && !string.IsNullOrWhiteSpace(ogImage))
     {
         <meta property="og:image" content="@(ogImage.StartsWith("http") ? ogImage : siteBaseUrl + ogImage)" />
+    }
+
+    @if (!string.IsNullOrEmpty(faviconPath))
+    {
+        <link rel="icon" type="image/x-icon" href="@faviconPath" />
+        <link rel="shortcut icon" type="image/x-icon" href="@faviconPath" />
+    }
+    else
+    {
+        <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     }
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />

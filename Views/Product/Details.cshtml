@@ -19,7 +19,7 @@
 <!-- SAYFA HERO (site tasarımı ile uyumlu) -->
 <section class="page-hero page-hero-simple">
     <div class="container-xl text-center">
-        <h1 class="page-hero-title">@Model.Name</h1>
+        <h1 class="page-hero-title">@Model.Category?.Name ?? @Model.Name</h1>
     </div>
 </section>
 

@@ -44,6 +44,26 @@ public class AdminLogoController : Controller
         return Path.Combine(settingsFolder, "footer-brand.txt");
     }
 
+    private string GetSiteDescriptionFilePath()
+    {
+        var settingsFolder = Path.Combine(_env.WebRootPath, "uploads", "settings");
+        if (!Directory.Exists(settingsFolder))
+        {
+            Directory.CreateDirectory(settingsFolder);
+        }
+        return Path.Combine(settingsFolder, "site-description.txt");
+    }
+
+    private string GetFaviconPhysicalPath()
+    {
+        var settingsFolder = Path.Combine(_env.WebRootPath, "uploads", "settings");
+        if (!Directory.Exists(settingsFolder))
+        {
+            Directory.CreateDirectory(settingsFolder);
+        }
+        return Path.Combine(settingsFolder, "favicon.ico");
+    }
+
     public async Task<IActionResult> Index()
     {
         var logos = await _context.SiteLogos
@@ -85,6 +105,31 @@ public class AdminLogoController : Controller
             ViewBag.FooterBrandTitle = null;
             ViewBag.FooterBrandSubtitle = null;
             ViewBag.FooterBrandDescription = null;
+        }
+
+        // Site description
+        try
+        {
+            var descPath = GetSiteDescriptionFilePath();
+            if (System.IO.File.Exists(descPath))
+            {
+                ViewBag.SiteDescription = await System.IO.File.ReadAllTextAsync(descPath);
+            }
+        }
+        catch
+        {
+            ViewBag.SiteDescription = null;
+        }
+
+        // Favicon var mı?
+        try
+        {
+            var faviconPath = GetFaviconPhysicalPath();
+            ViewBag.FaviconExists = System.IO.File.Exists(faviconPath);
+        }
+        catch
+        {
+            ViewBag.FaviconExists = false;
         }
 
         return View(logos);
@@ -197,6 +242,60 @@ public class AdminLogoController : Controller
         {
             _logger.LogError(ex, "Alt sayfa adı güncellenirken bir hata oluştu.");
             ModelState.AddModelError(string.Empty, "Alt sayfa adı kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateSiteDescription(string siteDescription)
+    {
+        if (siteDescription == null)
+        {
+            siteDescription = string.Empty;
+        }
+
+        if (siteDescription.Length > 160)
+        {
+            siteDescription = siteDescription.Substring(0, 160);
+        }
+
+        try
+        {
+            var descPath = GetSiteDescriptionFilePath();
+            await System.IO.File.WriteAllTextAsync(descPath, siteDescription);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Site description güncellenirken bir hata oluştu.");
+            ModelState.AddModelError(string.Empty, "Site description kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UploadFavicon(IFormFile? faviconFile)
+    {
+        if (faviconFile == null || faviconFile.Length == 0)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        try
+        {
+            var physicalPath = GetFaviconPhysicalPath();
+            using (var stream = new FileStream(physicalPath, FileMode.Create))
+            {
+                await faviconFile.CopyToAsync(stream);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Favicon güncellenirken bir hata oluştu.");
+            ModelState.AddModelError(string.Empty, "Favicon kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
         }
 
         return RedirectToAction(nameof(Index));

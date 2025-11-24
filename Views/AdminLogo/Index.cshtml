@@ -6,6 +6,8 @@
     var footerBrandTitle = ViewBag.FooterBrandTitle as string;
     var footerBrandSubtitle = ViewBag.FooterBrandSubtitle as string;
     var footerBrandDescription = ViewBag.FooterBrandDescription as string;
+    var siteDescription = ViewBag.SiteDescription as string ?? string.Empty;
+    var faviconExists = ViewBag.FaviconExists is bool fe && fe;
 }
 
 <section class="page-hero page-hero-simple">
@@ -18,6 +20,60 @@
     <div class="container-xl">
         <div class="row g-4">
             <div class="col-lg-8">
+                <div class="home-card admin-card mb-4">
+                    <h3 class="mb-3">Favicon (Tarayıcı Sekmesi Logosu)</h3>
+                    <p class="home-section-text mb-3">
+                        Sitenizin internet tarayıcısında sekme üzerinde görünen küçük favicon logosunu buradan güncelleyebilirsiniz.
+                    </p>
+                    <form asp-action="UploadFavicon" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+                        <div class="mb-3">
+                            <label class="form-label">Favicon Görseli</label>
+                            <input type="file"
+                                   name="faviconFile"
+                                   class="form-control"
+                                   accept="image/x-icon,image/png,image/svg+xml" />
+                            <small class="form-text text-muted">
+                                Önerilen boyut: 32x32 px veya 48x48 px .ico dosyası. Sitenizin internet tarayıcısında görünen küçük logosu olacaktır.
+                            </small>
+                            @if (faviconExists)
+                            {
+                                <div class="mt-2 small text-muted">
+                                    Mevcut bir favicon ayarlı. Yeni dosya yüklerseniz eski faviconun yerini alacaktır.
+                                </div>
+                            }
+                        </div>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-save me-2"></i>Faviconu Güncelle
+                        </button>
+                    </form>
+                </div>
+
+                <div class="home-card admin-card mb-4">
+                    <h3 class="mb-3">Site Description (Meta Açıklama)</h3>
+                    <p class="home-section-text mb-3">
+                        Sitenizin internet tarayıcısında ve arama sonuçlarında görünen kısa açıklamayı buradan güncelleyebilirsiniz.
+                    </p>
+                    <form asp-action="UpdateSiteDescription" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="siteDescription"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="160">@siteDescription</textarea>
+                            <small class="form-text text-muted">
+                                Sitenizin internet tarayıcısında ve arama motorlarında görünecek açıklama. En fazla 160 karakter olabilir.
+                            </small>
+                        </div>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-save me-2"></i>Description Güncelle
+                        </button>
+                    </form>
+                </div>
+
                 <div class="home-card admin-card mb-4">
                     <h3 class="mb-3">Footer Sol Alan Metni</h3>
                     <p class="home-section-text mb-3">
