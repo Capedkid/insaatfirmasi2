@@ -266,4 +266,37 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // MOBILE PRODUCTS DROPDOWN TOGGLE
+    const productsDropdownToggle = document.getElementById('headerProductsDropdownToggle');
+    const productsNavItem = document.querySelector('.nav-item-products');
+
+    if (productsDropdownToggle && productsNavItem) {
+        productsDropdownToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const isOpen = productsNavItem.classList.toggle('is-open');
+            productsDropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+            const icon = productsDropdownToggle.querySelector('i');
+            if (icon) {
+                icon.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+
+        // Menü dışında tıklanınca dropdown'u kapat
+        document.addEventListener('click', function (e) {
+            if (!productsNavItem.contains(e.target)) {
+                if (productsNavItem.classList.contains('is-open')) {
+                    productsNavItem.classList.remove('is-open');
+                    productsDropdownToggle.setAttribute('aria-expanded', 'false');
+                    const icon = productsDropdownToggle.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+        });
+    }
 });

@@ -116,8 +116,17 @@
                     <li><a class="main-nav-link" asp-area="" asp-controller="Home" asp-action="Index">@(currentLang == "en" ? "Home" : "Anasayfa")</a></li>
                     <li><a class="main-nav-link" asp-route="kurumsal">@(currentLang == "en" ? "About" : "Kurumsal")</a></li>
                     <li class="nav-item-products">
-                        <a class="main-nav-link" asp-route="urunler">@(currentLang == "en" ? "Products" : "Ürünler")</a>
-                        <div class="nav-dropdown">
+                        <div class="nav-item-products-inner">
+                            <a class="main-nav-link" asp-route="urunler">@(currentLang == "en" ? "Products" : "Ürünler")</a>
+                            <button type="button"
+                                    class="nav-dropdown-toggle"
+                                    id="headerProductsDropdownToggle"
+                                    aria-label="Ürün kategorilerini aç/kapat"
+                                    aria-expanded="false">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="nav-dropdown" id="headerProductsDropdown">
                             @await Component.InvokeAsync("HeaderCategories")
                         </div>
                     </li>

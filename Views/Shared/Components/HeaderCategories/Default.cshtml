@@ -1,10 +1,16 @@
 @using InsaatFirmasi.Models
 @model IEnumerable<Category>
+@{
+    var categories = Model?.ToList() ?? new List<Category>();
+    var itemCount = categories.Count;
+    var gridClass = itemCount <= 6 ? "nav-grid-3" : "nav-grid-4";
+    var hasMoreCategories = ViewBag.HasMoreCategories is bool b && b;
+}
 
-@if (Model != null && Model.Any())
+@if (categories.Any())
 {
-    <div class="nav-dropdown-grid">
-        @foreach (var category in Model)
+    <div class="nav-dropdown-grid @gridClass">
+        @foreach (var category in categories)
         {
             <div class="nav-dropdown-col">
                 <a asp-controller="Product"
@@ -33,6 +39,16 @@
                 </a>
             </div>
         }
+
+        @if (hasMoreCategories)
+        {
+            <div class="nav-dropdown-col nav-dropdown-more-col">
+                <a asp-route="urunler" class="nav-dropdown-more-link">
+                    <span>Daha fazlası</span>
+                    <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        }
     </div>
 }
 else
@@ -41,5 +57,3 @@ else
         Henüz kategori eklenmemiş.
     </div>
 }
-
-

@@ -16,12 +16,18 @@ public class HeaderCategoriesViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var categories = await _context.Categories
-            .Where(c => c.IsActive)
+        var baseQuery = _context.Categories
+            .Where(c => c.IsActive);
+
+        var totalActiveCount = await baseQuery.CountAsync();
+
+        var categories = await baseQuery
             .OrderBy(c => c.SortOrder)
             .ThenBy(c => c.Name)
             .Take(8)
             .ToListAsync();
+
+        ViewBag.HasMoreCategories = totalActiveCount > 8;
 
         return View(categories);
     }
