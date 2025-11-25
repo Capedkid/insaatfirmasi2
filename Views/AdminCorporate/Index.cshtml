@@ -47,30 +47,63 @@
                             <textarea name="HistoryText2" class="form-control" rows="3" placeholder="İkinci paragraf (opsiyonel)">@Model.HistoryText2</textarea>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Tarihçe Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <input name="HistoryTitleEn" class="form-control" value="@Model.HistoryTitleEn" placeholder="E.g. Plastic construction solutions since 1995" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tarihçe Metni 1 (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <textarea name="HistoryText1En" class="form-control" rows="3" placeholder="First paragraph (EN)">@Model.HistoryText1En</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tarihçe Metni 2 (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <textarea name="HistoryText2En" class="form-control" rows="3" placeholder="Second paragraph (EN, optional)">@Model.HistoryText2En</textarea>
+                        </div>
+
                         <div class="row g-3 mb-4">
                             <div class="col-md-3">
                                 <label class="form-label">1. Kart Başlığı</label>
                                 <input name="HistoryItem1Title" class="form-control" value="@Model.HistoryItem1Title" placeholder="Örn: Modern üretim teknolojisi" />
                                 <label class="form-label mt-2">1. Kart Yazısı</label>
                                 <textarea name="HistoryItem1Text" class="form-control" rows="2">@Model.HistoryItem1Text</textarea>
+
+                                <label class="form-label mt-3">1. Kart Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="HistoryItem1TitleEn" class="form-control" value="@Model.HistoryItem1TitleEn" placeholder="E.g. Modern production technology" />
+                                <label class="form-label mt-2">1. Kart Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="HistoryItem1TextEn" class="form-control" rows="2">@Model.HistoryItem1TextEn</textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">2. Kart Başlığı</label>
                                 <input name="HistoryItem2Title" class="form-control" value="@Model.HistoryItem2Title" placeholder="Örn: Kalite odaklı yaklaşım" />
                                 <label class="form-label mt-2">2. Kart Yazısı</label>
                                 <textarea name="HistoryItem2Text" class="form-control" rows="2">@Model.HistoryItem2Text</textarea>
+
+                                <label class="form-label mt-3">2. Kart Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="HistoryItem2TitleEn" class="form-control" value="@Model.HistoryItem2TitleEn" placeholder="E.g. Quality-focused approach" />
+                                <label class="form-label mt-2">2. Kart Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="HistoryItem2TextEn" class="form-control" rows="2">@Model.HistoryItem2TextEn</textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">3. Kart Başlığı</label>
                                 <input name="HistoryItem3Title" class="form-control" value="@Model.HistoryItem3Title" placeholder="Örn: İnovasyon ve tasarım" />
                                 <label class="form-label mt-2">3. Kart Yazısı</label>
                                 <textarea name="HistoryItem3Text" class="form-control" rows="2">@Model.HistoryItem3Text</textarea>
+
+                                <label class="form-label mt-3">3. Kart Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="HistoryItem3TitleEn" class="form-control" value="@Model.HistoryItem3TitleEn" placeholder="E.g. Innovation and design" />
+                                <label class="form-label mt-2">3. Kart Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="HistoryItem3TextEn" class="form-control" rows="2">@Model.HistoryItem3TextEn</textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">4. Kart Başlığı</label>
                                 <input name="HistoryItem4Title" class="form-control" value="@Model.HistoryItem4Title" placeholder="Örn: Uzun soluklu iş birlikleri" />
                                 <label class="form-label mt-2">4. Kart Yazısı</label>
                                 <textarea name="HistoryItem4Text" class="form-control" rows="2">@Model.HistoryItem4Text</textarea>
+
+                                <label class="form-label mt-3">4. Kart Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="HistoryItem4TitleEn" class="form-control" value="@Model.HistoryItem4TitleEn" placeholder="E.g. Long-term collaborations" />
+                                <label class="form-label mt-2">4. Kart Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="HistoryItem4TextEn" class="form-control" rows="2">@Model.HistoryItem4TextEn</textarea>
                             </div>
                         </div>
 
@@ -83,12 +116,22 @@
                                 <input name="MissionTitle" class="form-control" value="@Model.MissionTitle" placeholder="Örn: Misyonumuz" />
                                 <label class="form-label mt-2">Misyon Metni</label>
                                 <textarea name="MissionText" class="form-control" rows="4">@Model.MissionText</textarea>
+
+                                <label class="form-label mt-3">Misyon Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="MissionTitleEn" class="form-control" value="@Model.MissionTitleEn" placeholder="E.g. Our Mission" />
+                                <label class="form-label mt-2">Misyon Metni (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="MissionTextEn" class="form-control" rows="4">@Model.MissionTextEn</textarea>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Vizyon Başlığı</label>
                                 <input name="VisionTitle" class="form-control" value="@Model.VisionTitle" placeholder="Örn: Vizyonumuz" />
                                 <label class="form-label mt-2">Vizyon Metni</label>
                                 <textarea name="VisionText" class="form-control" rows="4">@Model.VisionText</textarea>
+
+                                <label class="form-label mt-3">Vizyon Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="VisionTitleEn" class="form-control" value="@Model.VisionTitleEn" placeholder="E.g. Our Vision" />
+                                <label class="form-label mt-2">Vizyon Metni (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="VisionTextEn" class="form-control" rows="4">@Model.VisionTextEn</textarea>
                             </div>
                         </div>
 
@@ -104,30 +147,59 @@
                             <textarea name="ValuesSubtitle" class="form-control" rows="3">@Model.ValuesSubtitle</textarea>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Değerler Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <input name="ValuesTitleEn" class="form-control" value="@Model.ValuesTitleEn" placeholder="E.g. Principles that shape our working culture" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Değerler Alt Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <textarea name="ValuesSubtitleEn" class="form-control" rows="3">@Model.ValuesSubtitleEn</textarea>
+                        </div>
+
                         <div class="row g-3 mb-3">
                             <div class="col-md-3">
                                 <label class="form-label">1. Değer Başlığı</label>
                                 <input name="Value1Title" class="form-control" value="@Model.Value1Title" placeholder="Örn: Kalite" />
                                 <label class="form-label mt-2">1. Değer Metni</label>
                                 <textarea name="Value1Text" class="form-control" rows="3">@Model.Value1Text</textarea>
+
+                                <label class="form-label mt-3">1. Değer Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Value1TitleEn" class="form-control" value="@Model.Value1TitleEn" placeholder="E.g. Quality" />
+                                <label class="form-label mt-2">1. Değer Metni (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Value1TextEn" class="form-control" rows="3">@Model.Value1TextEn</textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">2. Değer Başlığı</label>
                                 <input name="Value2Title" class="form-control" value="@Model.Value2Title" placeholder="Örn: Müşteri odaklılık" />
                                 <label class="form-label mt-2">2. Değer Metni</label>
                                 <textarea name="Value2Text" class="form-control" rows="3">@Model.Value2Text</textarea>
+
+                                <label class="form-label mt-3">2. Değer Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Value2TitleEn" class="form-control" value="@Model.Value2TitleEn" placeholder="E.g. Customer focus" />
+                                <label class="form-label mt-2">2. Değer Metni (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Value2TextEn" class="form-control" rows="3">@Model.Value2TextEn</textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">3. Değer Başlığı</label>
                                 <input name="Value3Title" class="form-control" value="@Model.Value3Title" placeholder="Örn: İnovasyon" />
                                 <label class="form-label mt-2">3. Değer Metni</label>
                                 <textarea name="Value3Text" class="form-control" rows="3">@Model.Value3Text</textarea>
+
+                                <label class="form-label mt-3">3. Değer Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Value3TitleEn" class="form-control" value="@Model.Value3TitleEn" placeholder="E.g. Innovation" />
+                                <label class="form-label mt-2">3. Değer Metni (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Value3TextEn" class="form-control" rows="3">@Model.Value3TextEn</textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">4. Değer Başlığı</label>
                                 <input name="Value4Title" class="form-control" value="@Model.Value4Title" placeholder="Örn: Güvenilirlik" />
                                 <label class="form-label mt-2">4. Değer Metni</label>
                                 <textarea name="Value4Text" class="form-control" rows="3">@Model.Value4Text</textarea>
+
+                                <label class="form-label mt-3">4. Değer Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Value4TitleEn" class="form-control" value="@Model.Value4TitleEn" placeholder="E.g. Reliability" />
+                                <label class="form-label mt-2">4. Değer Metni (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Value4TextEn" class="form-control" rows="3">@Model.Value4TextEn</textarea>
                             </div>
                         </div>
 

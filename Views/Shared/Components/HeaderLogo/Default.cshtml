@@ -1,9 +1,39 @@
-<span class="brand-text konap-brand">
-    <span class="brand-title konap-brand-title">
-        <span class="konap-letter konap-letter-accent">K</span>
-        <span class="konap-letter konap-letter-strong">O</span>
-        <span class="konap-letter konap-letter-accent">N</span>
-        <span class="konap-letter konap-letter-strong">A</span>
-        <span class="konap-letter konap-letter-accent">P</span>
+@model InsaatFirmasi.Models.SiteLogo
+@{
+    bool showKonapTextWithLogo = ViewBag.ShowKonapTextWithLogo is bool sk && sk;
+    bool hasLogo = Model != null && !string.IsNullOrEmpty(Model.ImagePath);
+}
+
+@if (!hasLogo)
+{
+    <span class="brand-text konap-brand">
+        <span class="brand-title konap-brand-title">
+            <span class="konap-letter konap-letter-accent">K</span>
+            <span class="konap-letter konap-letter-strong">O</span>
+            <span class="konap-letter konap-letter-accent">N</span>
+            <span class="konap-letter konap-letter-strong">A</span>
+            <span class="konap-letter konap-letter-accent">P</span>
+        </span>
     </span>
-</span>
+}
+else
+{
+    <div class="d-inline-flex align-items-center gap-2">
+        <img src="~/@Model.ImagePath"
+             alt="Firma Logosu"
+             class="header-logo-image" />
+
+        @if (showKonapTextWithLogo)
+        {
+            <span class="brand-text konap-brand">
+                <span class="brand-title konap-brand-title">
+                    <span class="konap-letter konap-letter-accent">K</span>
+                    <span class="konap-letter konap-letter-strong">O</span>
+                    <span class="konap-letter konap-letter-accent">N</span>
+                    <span class="konap-letter konap-letter-strong">A</span>
+                    <span class="konap-letter konap-letter-accent">P</span>
+                </span>
+            </span>
+        }
+    </div>
+}

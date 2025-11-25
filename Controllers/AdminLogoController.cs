@@ -64,47 +64,71 @@ public class AdminLogoController : Controller
         return Path.Combine(settingsFolder, "favicon.ico");
     }
 
+    private string GetHeaderLogoSettingsFilePath()
+    {
+        var settingsFolder = Path.Combine(_env.WebRootPath, "uploads", "settings");
+        if (!Directory.Exists(settingsFolder))
+        {
+            Directory.CreateDirectory(settingsFolder);
+        }
+        return Path.Combine(settingsFolder, "header-logo-settings.txt");
+    }
+
     public async Task<IActionResult> Index()
     {
         var logos = await _context.SiteLogos
             .OrderByDescending(l => l.CreatedDate)
             .ToListAsync();
 
-        // Footer alt sayfa adı
+        // Footer alt sayfa adı (TR / EN)
         try
         {
             var footerPath = GetFooterTextFilePath();
             if (System.IO.File.Exists(footerPath))
             {
-                ViewBag.FooterText = await System.IO.File.ReadAllTextAsync(footerPath);
+                var lines = await System.IO.File.ReadAllLinesAsync(footerPath);
+                ViewBag.FooterTextTr = lines.Length > 0 && !string.IsNullOrWhiteSpace(lines[0])
+                    ? lines[0]
+                    : "İnşaat Plastik Çözümler";
+                ViewBag.FooterTextEn = lines.Length > 1 && !string.IsNullOrWhiteSpace(lines[1])
+                    ? lines[1]
+                    : "Construction Plastic Solutions";
             }
             else
             {
-                ViewBag.FooterText = "İnşaat Plastik Çözümler";
+                ViewBag.FooterTextTr = "İnşaat Plastik Çözümler";
+                ViewBag.FooterTextEn = "Construction Plastic Solutions";
             }
         }
         catch
         {
-            ViewBag.FooterText = "İnşaat Plastik Çözümler";
+            ViewBag.FooterTextTr = "İnşaat Plastik Çözümler";
+            ViewBag.FooterTextEn = "Construction Plastic Solutions";
         }
 
-        // Footer sol alan (başlık, alt başlık, açıklama)
+        // Footer sol alan (başlık, alt başlık, açıklama - TR / EN)
         try
         {
             var brandPath = GetFooterBrandFilePath();
             if (System.IO.File.Exists(brandPath))
             {
                 var lines = await System.IO.File.ReadAllLinesAsync(brandPath);
-                ViewBag.FooterBrandTitle = lines.Length > 0 ? lines[0] : null;
-                ViewBag.FooterBrandSubtitle = lines.Length > 1 ? lines[1] : null;
-                ViewBag.FooterBrandDescription = lines.Length > 2 ? lines[2] : null;
+                ViewBag.FooterBrandTitleTr = lines.Length > 0 ? lines[0] : null;
+                ViewBag.FooterBrandSubtitleTr = lines.Length > 1 ? lines[1] : null;
+                ViewBag.FooterBrandDescriptionTr = lines.Length > 2 ? lines[2] : null;
+                ViewBag.FooterBrandTitleEn = lines.Length > 3 ? lines[3] : null;
+                ViewBag.FooterBrandSubtitleEn = lines.Length > 4 ? lines[4] : null;
+                ViewBag.FooterBrandDescriptionEn = lines.Length > 5 ? lines[5] : null;
             }
         }
         catch
         {
-            ViewBag.FooterBrandTitle = null;
-            ViewBag.FooterBrandSubtitle = null;
-            ViewBag.FooterBrandDescription = null;
+            ViewBag.FooterBrandTitleTr = null;
+            ViewBag.FooterBrandSubtitleTr = null;
+            ViewBag.FooterBrandDescriptionTr = null;
+            ViewBag.FooterBrandTitleEn = null;
+            ViewBag.FooterBrandSubtitleEn = null;
+            ViewBag.FooterBrandDescriptionEn = null;
         }
 
         // Site description
@@ -130,6 +154,25 @@ public class AdminLogoController : Controller
         catch
         {
             ViewBag.FaviconExists = false;
+        }
+
+        // Header logosu ile KONAP metni birlikte görünsün mü?
+        try
+        {
+            var settingsPath = GetHeaderLogoSettingsFilePath();
+            if (System.IO.File.Exists(settingsPath))
+            {
+                var raw = (await System.IO.File.ReadAllTextAsync(settingsPath)).Trim().ToLowerInvariant();
+                ViewBag.ShowKonapTextWithLogo = raw == "true" || raw == "1" || raw == "yes";
+            }
+            else
+            {
+                ViewBag.ShowKonapTextWithLogo = true;
+            }
+        }
+        catch
+        {
+            ViewBag.ShowKonapTextWithLogo = true;
         }
 
         return View(logos);
@@ -226,17 +269,20 @@ public class AdminLogoController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateFooterText(string footerText)
+    public async Task<IActionResult> UpdateFooterText(string footerTextTr, string footerTextEn)
     {
-        if (footerText == null)
-        {
-            footerText = string.Empty;
-        }
+        footerTextTr ??= string.Empty;
+        footerTextEn ??= string.Empty;
 
         try
         {
             var footerPath = GetFooterTextFilePath();
-            await System.IO.File.WriteAllTextAsync(footerPath, footerText);
+            var lines = new List<string>
+            {
+                footerTextTr,
+                footerTextEn
+            };
+            await System.IO.File.WriteAllLinesAsync(footerPath, lines);
         }
         catch (Exception ex)
         {
@@ -303,7 +349,7 @@ public class AdminLogoController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateFooterBrand(string brandTitle, string brandSubtitle, string brandDescription)
+    public async Task<IActionResult> UpdateFooterBrand(string brandTitle, string brandSubtitle, string brandDescription, string brandTitleEn, string brandSubtitleEn, string brandDescriptionEn)
     {
         try
         {
@@ -312,7 +358,10 @@ public class AdminLogoController : Controller
             {
                 brandTitle ?? string.Empty,
                 brandSubtitle ?? string.Empty,
-                brandDescription ?? string.Empty
+                brandDescription ?? string.Empty,
+                brandTitleEn ?? string.Empty,
+                brandSubtitleEn ?? string.Empty,
+                brandDescriptionEn ?? string.Empty
             };
             await System.IO.File.WriteAllLinesAsync(brandPath, lines);
         }
@@ -320,6 +369,27 @@ public class AdminLogoController : Controller
         {
             _logger.LogError(ex, "Footer sol alan metni güncellenirken bir hata oluştu.");
             ModelState.AddModelError(string.Empty, "Footer sol metni kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateHeaderLogoSettings(string showKonapTextWithLogo)
+    {
+        var raw = (showKonapTextWithLogo ?? string.Empty).Trim().ToLowerInvariant();
+        var flag = raw == "true" || raw == "1" || raw == "yes" || raw == "on";
+
+        try
+        {
+            var settingsPath = GetHeaderLogoSettingsFilePath();
+            await System.IO.File.WriteAllTextAsync(settingsPath, flag ? "true" : "false");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Header logo ayarları güncellenirken bir hata oluştu.");
+            ModelState.AddModelError(string.Empty, "Header logo ayarları kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.");
         }
 
         return RedirectToAction(nameof(Index));

@@ -1833,20 +1833,19 @@ body {
     top: auto;
     transform: none;
     min-width: 100%;
-    max-width: none;
-    margin-top: 0.25rem;
+    max-width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0 1rem;
+    background: transparent;
     box-shadow: none;
-    border-radius: 0.5rem;
+    border-radius: 0;
     border-width: 0;
-    padding: 0.25rem 0 0.5rem;
+    max-height: none;
+    overflow: visible;
   }
 
   .nav-dropdown-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .nav-item-products {
-    position: static;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .nav-item-products.is-open .nav-dropdown {
@@ -1857,12 +1856,20 @@ body {
 }
 
 @media (max-width: 576px) {
-  .nav-dropdown-grid {
-    grid-template-columns: minmax(0, 1fr);
+  .nav-product-card {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-group-image {
+    flex: 1;
   }
 
   .product-group-image img {
-    height: 200px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -1997,31 +2004,42 @@ body {
   }
 
   .main-nav {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 64px;
     left: 0;
     right: 0;
-    margin-top: 0.4rem;
-    padding: 0.75rem 1rem 1rem;
-    background: #020617;
-    border-bottom: 1px solid rgba(31, 41, 55, 1);
-    display: none;
+    padding: 0.9rem 1.25rem 1.5rem;
+    background: rgba(2, 6, 23, 0.9);
+    display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 1rem;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(12px);
+    z-index: 1300;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
   }
 
   .main-nav.open {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .main-nav-list {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
   }
 
   .main-nav-right {
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .footer-bottom {

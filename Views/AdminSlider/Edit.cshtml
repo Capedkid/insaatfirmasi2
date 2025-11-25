@@ -1,0 +1,114 @@
+@model InsaatFirmasi.Models.Slider
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Slider Düzenle";
+}
+
+<section class="page-hero page-hero-simple">
+    <div class="container-xl text-center">
+        <h1 class="page-hero-title">Slider Düzenle</h1>
+    </div>
+</section>
+
+<section class="home-section admin-dashboard-section">
+    <div class="container-xl">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="home-card admin-card">
+                    <span class="home-section-kicker d-block mb-1">Slider Bilgileri</span>
+                    <h3>Slider İçeriğini Güncelle</h3>
+
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Üst Başlık (küçük etiket)</label>
+                            <input name="Kicker" class="form-control" value="@Model.Kicker" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Üst Başlık (EN) - opsiyonel</label>
+                            <input name="KickerEn" class="form-control" value="@Model.KickerEn" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Başlık</label>
+                            <input name="Title" class="form-control" value="@Model.Title" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Başlık (EN) - opsiyonel</label>
+                            <input name="TitleEn" class="form-control" value="@Model.TitleEn" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Alt Başlık</label>
+                            <textarea name="Subtitle" class="form-control" rows="2">@Model.Subtitle</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Alt Başlık (EN) - opsiyonel</label>
+                            <textarea name="SubtitleEn" class="form-control" rows="2">@Model.SubtitleEn</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">1. Buton (opsiyonel)</label>
+                            <select name="Button1Type" class="form-select">
+                                <option value="" selected="@string.IsNullOrEmpty(Model.Button1Type)">Buton yok</option>
+                                <option value="products" selected="@(Model.Button1Type == "products")">Ürünleri Keşfet (Ürünler sayfası)</option>
+                                <option value="contact" selected="@(Model.Button1Type == "contact")">İletişim (İletişim sayfası)</option>
+                                <option value="catalog" selected="@(Model.Button1Type == "catalog")">Online Katalog (Katalog sayfası)</option>
+                                <option value="blog" selected="@(Model.Button1Type == "blog")">Blog (Blog sayfası)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">2. Buton (opsiyonel)</label>
+                            <select name="Button2Type" class="form-select">
+                                <option value="" selected="@string.IsNullOrEmpty(Model.Button2Type)">Buton yok</option>
+                                <option value="products" selected="@(Model.Button2Type == "products")">Ürünleri Keşfet (Ürünler sayfası)</option>
+                                <option value="contact" selected="@(Model.Button2Type == "contact")">İletişim (İletişim sayfası)</option>
+                                <option value="catalog" selected="@(Model.Button2Type == "catalog")">Online Katalog (Katalog sayfası)</option>
+                                <option value="blog" selected="@(Model.Button2Type == "blog")">Blog (Blog sayfası)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Slider Görseli (isteğe bağlı yeni görsel)</label>
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                            <small class="form-text text-muted">Yeni bir görsel seçerseniz mevcut slider görselinin yerini alır.</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-lg px-4">
+                            <i class="fas fa-save me-2"></i>Kaydet
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-light ms-2">Geri Dön</a>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="home-card admin-card">
+                    <span class="home-section-kicker d-block mb-1">Mevcut Görsel</span>
+                    <h3>Slider Görsel Önizlemesi</h3>
+                    <div class="mt-3">
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <img src="~/@Model.ImagePath" alt="@Model.Title" class="img-fluid rounded" style="max-height:260px; object-fit:cover;" />
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height:260px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

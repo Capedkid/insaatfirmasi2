@@ -85,6 +85,9 @@
                                         <td>@category.Name</td>
                                         <td>@category.Description</td>
                                         <td class="text-end">
+                                            <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-outline-light me-1">
+                                                <i class="fas fa-pen me-1"></i>Düzenle
+                                            </a>
                                             <form asp-action="Delete" method="post" class="d-inline">
                                                 <input type="hidden" name="id" value="@category.Id" />
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silmek istediğinize emin misiniz?');">

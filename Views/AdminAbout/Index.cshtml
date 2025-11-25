@@ -43,24 +43,49 @@
                             <textarea name="Subtitle" class="form-control" rows="3" placeholder="Kısa açıklama">@Model.Content.Subtitle</textarea>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Başlık (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <input name="TitleEn" class="form-control" value="@Model.Content.TitleEn" placeholder="E.g. Reliable manufacturer in plastic construction solutions" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Alt Başlık / Açıklama (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <textarea name="SubtitleEn" class="form-control" rows="3" placeholder="Short description (EN)">@Model.Content.SubtitleEn</textarea>
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">1. Madde Başlığı</label>
                                 <input name="Item1Title" class="form-control" value="@Model.Content.Item1Title" placeholder="Örn: 25+ yıllık tecrübe" />
                                 <label class="form-label mt-2">1. Madde Yazısı</label>
                                 <textarea name="Item1Text" class="form-control" rows="2" placeholder="Kısa açıklama">@Model.Content.Item1Text</textarea>
+
+                                <label class="form-label mt-3">1. Madde Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Item1TitleEn" class="form-control" value="@Model.Content.Item1TitleEn" placeholder="E.g. 25+ years of experience" />
+                                <label class="form-label mt-2">1. Madde Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Item1TextEn" class="form-control" rows="2" placeholder="Short description (EN)">@Model.Content.Item1TextEn</textarea>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">2. Madde Başlığı</label>
                                 <input name="Item2Title" class="form-control" value="@Model.Content.Item2Title" placeholder="Örn: Güçlü üretim altyapısı" />
                                 <label class="form-label mt-2">2. Madde Yazısı</label>
                                 <textarea name="Item2Text" class="form-control" rows="2" placeholder="Kısa açıklama">@Model.Content.Item2Text</textarea>
+
+                                <label class="form-label mt-3">2. Madde Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Item2TitleEn" class="form-control" value="@Model.Content.Item2TitleEn" placeholder="E.g. Strong production infrastructure" />
+                                <label class="form-label mt-2">2. Madde Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Item2TextEn" class="form-control" rows="2" placeholder="Short description (EN)">@Model.Content.Item2TextEn</textarea>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">3. Madde Başlığı</label>
                                 <input name="Item3Title" class="form-control" value="@Model.Content.Item3Title" placeholder="Örn: Projeye özel çözümler" />
                                 <label class="form-label mt-2">3. Madde Yazısı</label>
                                 <textarea name="Item3Text" class="form-control" rows="2" placeholder="Kısa açıklama">@Model.Content.Item3Text</textarea>
+
+                                <label class="form-label mt-3">3. Madde Başlığı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <input name="Item3TitleEn" class="form-control" value="@Model.Content.Item3TitleEn" placeholder="E.g. Project-specific solutions" />
+                                <label class="form-label mt-2">3. Madde Yazısı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                                <textarea name="Item3TextEn" class="form-control" rows="2" placeholder="Short description (EN)">@Model.Content.Item3TextEn</textarea>
                             </div>
                         </div>
 

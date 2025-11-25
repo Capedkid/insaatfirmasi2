@@ -5,10 +5,14 @@
     var currentUrl = request != null ? $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}" : "";
     var siteBaseUrl = request != null ? $"{request.Scheme}://{request.Host}" : "";
 
-    var footerText = "İnşaat Plastik Çözümler";
-    string? footerBrandTitleOverride = null;
-    string? footerBrandSubtitleOverride = null;
-    string? footerBrandDescriptionOverride = null;
+    var footerTextTr = "İnşaat Plastik Çözümler";
+    var footerTextEn = "Construction Plastic Solutions";
+    string? footerBrandTitleOverrideTr = null;
+    string? footerBrandSubtitleOverrideTr = null;
+    string? footerBrandDescriptionOverrideTr = null;
+    string? footerBrandTitleOverrideEn = null;
+    string? footerBrandSubtitleOverrideEn = null;
+    string? footerBrandDescriptionOverrideEn = null;
     string? siteDescriptionOverride = null;
     string? faviconPath = null;
 
@@ -18,16 +22,25 @@
         var footerPath = System.IO.Path.Combine(settingsFolder, "footer-text.txt");
         if (System.IO.File.Exists(footerPath))
         {
-            footerText = System.IO.File.ReadAllText(footerPath);
+            var footerLines = System.IO.File.ReadAllLines(footerPath);
+            footerTextTr = footerLines.Length > 0 && !string.IsNullOrWhiteSpace(footerLines[0])
+                ? footerLines[0]
+                : footerTextTr;
+            footerTextEn = footerLines.Length > 1 && !string.IsNullOrWhiteSpace(footerLines[1])
+                ? footerLines[1]
+                : footerTextEn;
         }
 
         var footerBrandPath = System.IO.Path.Combine(settingsFolder, "footer-brand.txt");
         if (System.IO.File.Exists(footerBrandPath))
         {
             var lines = System.IO.File.ReadAllLines(footerBrandPath);
-            footerBrandTitleOverride = lines.Length > 0 ? lines[0] : null;
-            footerBrandSubtitleOverride = lines.Length > 1 ? lines[1] : null;
-            footerBrandDescriptionOverride = lines.Length > 2 ? lines[2] : null;
+            footerBrandTitleOverrideTr = lines.Length > 0 ? lines[0] : null;
+            footerBrandSubtitleOverrideTr = lines.Length > 1 ? lines[1] : null;
+            footerBrandDescriptionOverrideTr = lines.Length > 2 ? lines[2] : null;
+            footerBrandTitleOverrideEn = lines.Length > 3 ? lines[3] : null;
+            footerBrandSubtitleOverrideEn = lines.Length > 4 ? lines[4] : null;
+            footerBrandDescriptionOverrideEn = lines.Length > 5 ? lines[5] : null;
         }
 
         var descPath = System.IO.Path.Combine(settingsFolder, "site-description.txt");
@@ -45,7 +58,8 @@
     }
     catch
     {
-        footerText = "İnşaat Plastik Çözümler";
+        footerTextTr = "İnşaat Plastik Çözümler";
+        footerTextEn = "Construction Plastic Solutions";
     }
 
     var viewDescription = ViewData["Description"] as string;
@@ -187,31 +201,37 @@
                         <div>
                             <div class="footer-brand-title">
                                 @(
-                                    !string.IsNullOrWhiteSpace(footerBrandTitleOverride)
-                                        ? footerBrandTitleOverride
-                                        : currentLang == "en"
-                                            ? "Construction Plastic Solutions"
-                                            : "İnşaat Plastik Çözümler"
+                                    currentLang == "en"
+                                        ? (!string.IsNullOrWhiteSpace(footerBrandTitleOverrideEn)
+                                            ? footerBrandTitleOverrideEn
+                                            : "Construction Plastic Solutions")
+                                        : (!string.IsNullOrWhiteSpace(footerBrandTitleOverrideTr)
+                                            ? footerBrandTitleOverrideTr
+                                            : "İnşaat Plastik Çözümler")
                                  )
                             </div>
                             <div class="footer-brand-subtitle">
                                 @(
-                                    !string.IsNullOrWhiteSpace(footerBrandSubtitleOverride)
-                                        ? footerBrandSubtitleOverride
-                                        : currentLang == "en"
-                                            ? "Drainage, manhole and wet area products"
-                                            : "Drenaj, rögar ve ıslak zemin ürünleri"
+                                    currentLang == "en"
+                                        ? (!string.IsNullOrWhiteSpace(footerBrandSubtitleOverrideEn)
+                                            ? footerBrandSubtitleOverrideEn
+                                            : "Drainage, manhole and wet area products")
+                                        : (!string.IsNullOrWhiteSpace(footerBrandSubtitleOverrideTr)
+                                            ? footerBrandSubtitleOverrideTr
+                                            : "Drenaj, rögar ve ıslak zemin ürünleri")
                                  )
                             </div>
                         </div>
                     </div>
                     <p class="footer-text">
                         @(
-                            !string.IsNullOrWhiteSpace(footerBrandDescriptionOverride)
-                                ? footerBrandDescriptionOverride
-                                : currentLang == "en"
-                                    ? "We provide long-lasting solutions for your infrastructure and superstructure projects with modern plastic construction materials."
-                                    : "Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz."
+                            currentLang == "en"
+                                ? (!string.IsNullOrWhiteSpace(footerBrandDescriptionOverrideEn)
+                                    ? footerBrandDescriptionOverrideEn
+                                    : "We provide long-lasting solutions for your infrastructure and superstructure projects with modern plastic construction materials.")
+                                : (!string.IsNullOrWhiteSpace(footerBrandDescriptionOverrideTr)
+                                    ? footerBrandDescriptionOverrideTr
+                                    : "Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz.")
                          )
                     </p>
                 </div>
@@ -232,7 +252,7 @@
 
             <div class="footer-bottom">
                 <span>
-                    © @DateTime.Now.Year @footerText
+                    © @DateTime.Now.Year @(currentLang == "en" ? footerTextEn : footerTextTr)
                 </span>
             </div>
         </div>

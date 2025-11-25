@@ -132,6 +132,94 @@ public class AdminSliderController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var slider = await _context.Sliders.FindAsync(id);
+        if (slider == null)
+        {
+            return NotFound();
+        }
+
+        return View(slider);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Slider updatedSlider, IFormFile? imageFile)
+    {
+        var slider = await _context.Sliders.FindAsync(id);
+        if (slider == null)
+        {
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(slider);
+        }
+
+        try
+        {
+            slider.Kicker = updatedSlider.Kicker;
+            slider.KickerEn = updatedSlider.KickerEn;
+            slider.Title = updatedSlider.Title;
+            slider.TitleEn = updatedSlider.TitleEn;
+            slider.Subtitle = updatedSlider.Subtitle;
+            slider.SubtitleEn = updatedSlider.SubtitleEn;
+            slider.Button1Type = updatedSlider.Button1Type;
+            slider.Button2Type = updatedSlider.Button2Type;
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // Mevcut görseli sil
+                try
+                {
+                    if (!string.IsNullOrEmpty(slider.ImagePath))
+                    {
+                        var oldPath = Path.Combine(
+                            _env.WebRootPath,
+                            slider.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString())
+                        );
+
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Slider güncellenirken eski görsel silinemedi.");
+                }
+
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "sliders");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(imageFile.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+
+                slider.ImagePath = Path.Combine("uploads", "sliders", uniqueFileName).Replace("\\", "/");
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Slider güncellenirken bir hata oluştu.");
+            ModelState.AddModelError(string.Empty, "Slider güncellenirken bir hata oluştu. Lütfen tekrar deneyin.");
+            return View(slider);
+        }
+    }
 }
 
 

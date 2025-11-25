@@ -109,6 +109,103 @@ public class AdminBlogController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public async Task<IActionResult> Edit(int id)
+    {
+        var post = await _context.BlogPosts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        return View(post);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, BlogPost updatedPost, IFormFile? imageFile)
+    {
+        var post = await _context.BlogPosts.FindAsync(id);
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(post);
+        }
+
+        try
+        {
+            post.Title = updatedPost.Title;
+            post.TitleEn = updatedPost.TitleEn;
+            post.Summary = updatedPost.Summary;
+            post.SummaryEn = updatedPost.SummaryEn;
+            post.Category = updatedPost.Category;
+            post.Tags = updatedPost.Tags;
+            post.Content = updatedPost.Content;
+            post.ContentEn = updatedPost.ContentEn;
+            post.IsFeatured = updatedPost.IsFeatured;
+
+            // Yayın durumu
+            var wasPublished = post.IsPublished;
+            post.IsPublished = updatedPost.IsPublished;
+            if (!wasPublished && post.IsPublished && !post.PublishedDate.HasValue)
+            {
+                post.PublishedDate = DateTime.Now;
+            }
+
+            // Kapak görseli güncelleme (isteğe bağlı)
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(post.ImagePath))
+                    {
+                        var oldPath = Path.Combine(
+                            _env.WebRootPath,
+                            post.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString())
+                        );
+
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Blog güncellenirken eski kapak görseli silinemedi.");
+                }
+
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "blog");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(imageFile.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+
+                post.ImagePath = Path.Combine("uploads", "blog", uniqueFileName).Replace("\\", "/");
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Blog yazısı güncellenirken bir hata oluştu.");
+            ModelState.AddModelError(string.Empty, "Blog yazısı güncellenirken bir hata oluştu. Lütfen tekrar deneyin.");
+            return View(post);
+        }
+    }
+
     // Blog yazısını sil
     [HttpPost]
     [ValidateAntiForgeryToken]

@@ -1,23 +1,139 @@
 @model IEnumerable<InsaatFirmasi.Models.SiteLogo>
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Alt Sayfa Yönetimi";
-    var footerText = ViewBag.FooterText as string ?? "İnşaat Plastik Çözümler";
-    var footerBrandTitle = ViewBag.FooterBrandTitle as string;
-    var footerBrandSubtitle = ViewBag.FooterBrandSubtitle as string;
-    var footerBrandDescription = ViewBag.FooterBrandDescription as string;
+    ViewData["Title"] = "Firma logosu ve alt sayfa yönetimi";
+    var footerTextTr = ViewBag.FooterTextTr as string ?? "İnşaat Plastik Çözümler";
+    var footerTextEn = ViewBag.FooterTextEn as string ?? "Construction Plastic Solutions";
+    var footerBrandTitleTr = ViewBag.FooterBrandTitleTr as string;
+    var footerBrandSubtitleTr = ViewBag.FooterBrandSubtitleTr as string;
+    var footerBrandDescriptionTr = ViewBag.FooterBrandDescriptionTr as string;
+    var footerBrandTitleEn = ViewBag.FooterBrandTitleEn as string;
+    var footerBrandSubtitleEn = ViewBag.FooterBrandSubtitleEn as string;
+    var footerBrandDescriptionEn = ViewBag.FooterBrandDescriptionEn as string;
     var siteDescription = ViewBag.SiteDescription as string ?? string.Empty;
     var faviconExists = ViewBag.FaviconExists is bool fe && fe;
+    var logos = Model?.ToList() ?? new List<InsaatFirmasi.Models.SiteLogo>();
+    var showKonapTextWithLogo = ViewBag.ShowKonapTextWithLogo is bool sk && sk;
 }
 
 <section class="page-hero page-hero-simple">
     <div class="container-xl text-center">
-        <h1 class="page-hero-title">Alt Sayfa Yönetimi</h1>
+        <h1 class="page-hero-title">Firma logosu ve alt sayfa yönetimi</h1>
     </div>
 </section>
 
 <section class="home-section admin-dashboard-section">
     <div class="container-xl">
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="home-card admin-card">
+                    <h3 class="mb-3">Firma logosu ve alt sayfa yönetimi</h3>
+                    <p class="home-section-text mb-3">
+                        Header bölümünde görünecek firma logosunu buradan yönetebilirsiniz. Logo yüklemezseniz varsayılan KONAP yazısı kullanılmaya devam eder.
+                    </p>
+
+                    <form asp-action="Create" method="post" enctype="multipart/form-data" class="mb-4">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label">Logo Görseli</label>
+                                <input type="file"
+                                       name="imageFile"
+                                       class="form-control"
+                                       accept="image/png,image/jpeg,image/svg+xml" />
+                                <small class="form-text text-muted">
+                                    Önerilen yükseklik: yaklaşık 34px. PNG veya SVG formatında şeffaf arka planlı logo kullanmanız önerilir.
+                                </small>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="fas fa-upload me-2"></i>Logo Yükle
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    @if (logos.Any())
+                    {
+                        <div class="mb-3">
+                            <h5 class="mb-2">Yüklü Logolar</h5>
+                            <p class="home-section-text small mb-2">
+                                En son yüklenen logo header'da kullanılır. İstediğiniz logoyu silerek güncel logo listesini yönetebilirsiniz.
+                            </p>
+                            <div class="row g-3">
+                                @for (var i = 0; i < logos.Count; i++)
+                                {
+                                    var logo = logos[i];
+                                    var isActiveLogo = i == 0;
+                                    <div class="col-md-3 col-sm-4 col-6">
+                                        <div class="border rounded-3 p-2 d-flex flex-column align-items-center text-center h-100">
+                                            <div class="mb-2">
+                                                <img src="~/@logo.ImagePath"
+                                                     alt="Firma Logosu"
+                                                     class="img-fluid header-logo-image" />
+                                            </div>
+                                            @if (isActiveLogo)
+                                            {
+                                                <span class="badge bg-success mb-2">Aktif logo</span>
+                                            }
+                                            <form asp-action="Delete" method="post" class="mt-auto">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@logo.Id" />
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fas fa-trash-alt me-1"></i>Sil
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted small mb-3">
+                            Henüz logo yüklenmemiş. Şu anda header bölümünde varsayılan KONAP marka yazısı görüntülenmektedir.
+                        </p>
+                    }
+
+                    <hr class="my-3" />
+
+                    <form asp-action="UpdateHeaderLogoSettings" method="post" class="mt-3">
+                        @Html.AntiForgeryToken()
+                        <label class="form-label d-block mb-1">Logo yanında KONAP marka yazısı</label>
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           name="showKonapTextWithLogo"
+                                           id="showKonapYes"
+                                           value="true"
+                                           @(showKonapTextWithLogo ? "checked" : null) />
+                                    <label class="form-check-label" for="showKonapYes">Görünsün (logo + KONAP)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           name="showKonapTextWithLogo"
+                                           id="showKonapNo"
+                                           value="false"
+                                           @(!showKonapTextWithLogo ? "checked" : null) />
+                                    <label class="form-check-label" for="showKonapNo">Sadece logo görünsün</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-outline-light btn-sm ms-md-2">
+                                <i class="fas fa-save me-1"></i>Kaydet
+                            </button>
+                        </div>
+                        <p class="home-section-text small mb-0 mt-2">
+                            Logo yüklenmemişse her durumda yalnızca KONAP yazısı görüntülenir. Bu ayar sadece logo yüklü olduğunda geçerlidir.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="row g-4">
             <div class="col-lg-6">
                 <div class="home-card admin-card mb-4">
@@ -90,7 +206,7 @@
                             <input type="text"
                                    name="brandTitle"
                                    class="form-control"
-                                   value="@footerBrandTitle"
+                                   value="@footerBrandTitleTr"
                                    maxlength="200"
                                    placeholder="Örn: Drenaj, rögar ve ıslak zemin çözümleri" />
                         </div>
@@ -99,7 +215,7 @@
                             <input type="text"
                                    name="brandSubtitle"
                                    class="form-control"
-                                   value="@footerBrandSubtitle"
+                                   value="@footerBrandSubtitleTr"
                                    maxlength="200"
                                    placeholder="Örn: Modern plastik inşaat malzemeleri" />
                         </div>
@@ -109,7 +225,34 @@
                                       class="form-control"
                                       rows="3"
                                       maxlength="500"
-                                      placeholder="Örn: Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz.">@footerBrandDescription</textarea>
+                                      placeholder="Örn: Modern plastik inşaat malzemeleri ile altyapı ve üstyapı projelerinize uzun ömürlü çözümler sunuyoruz.">@footerBrandDescriptionTr</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Başlık (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <input type="text"
+                                   name="brandTitleEn"
+                                   class="form-control"
+                                   value="@footerBrandTitleEn"
+                                   maxlength="200"
+                                   placeholder="E.g. Drainage, manhole and wet area solutions" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alt Başlık (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <input type="text"
+                                   name="brandSubtitleEn"
+                                   class="form-control"
+                                   value="@footerBrandSubtitleEn"
+                                   maxlength="200"
+                                   placeholder="E.g. Modern plastic construction materials" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Açıklama (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <textarea name="brandDescriptionEn"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="500"
+                                      placeholder="E.g. We provide long-lasting solutions for your infrastructure and superstructure projects with modern plastic construction materials.">@footerBrandDescriptionEn</textarea>
                         </div>
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-save me-2"></i>Footer Sol Metnini Güncelle
@@ -128,12 +271,23 @@
                         <div class="mb-3">
                             <label class="form-label">Alt sayfa adı</label>
                             <input type="text"
-                                   name="footerText"
+                                   name="footerTextTr"
                                    class="form-control"
-                                   value="@footerText"
+                                   value="@footerTextTr"
                                    maxlength="200" />
                             <small class="form-text text-muted">
                                 Örnek: "Konap İnşaat Plastik Çözümler". Sayfada şu şekilde görünecektir: © 2025 Konap İnşaat Plastik Çözümler
+                            </small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alt sayfa adı (EN) <span class="text-muted small">(opsiyonel)</span></label>
+                            <input type="text"
+                                   name="footerTextEn"
+                                   class="form-control"
+                                   value="@footerTextEn"
+                                   maxlength="200" />
+                            <small class="form-text text-muted">
+                                Örnek: "Konap Construction Plastic Solutions". EN sürümde şu şekilde görünecektir: © 2025 Konap Construction Plastic Solutions
                             </small>
                         </div>
                         <button type="submit" class="btn btn-danger">
