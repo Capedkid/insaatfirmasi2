@@ -163,7 +163,18 @@ public class AdminLogoController : Controller
             if (System.IO.File.Exists(settingsPath))
             {
                 var raw = (await System.IO.File.ReadAllTextAsync(settingsPath)).Trim().ToLowerInvariant();
-                ViewBag.ShowKonapTextWithLogo = raw == "true" || raw == "1" || raw == "yes";
+                if (raw == "true" || raw == "1" || raw == "yes")
+                {
+                    ViewBag.ShowKonapTextWithLogo = true;
+                }
+                else if (raw == "false" || raw == "0" || raw == "no")
+                {
+                    ViewBag.ShowKonapTextWithLogo = false;
+                }
+                else
+                {
+                    ViewBag.ShowKonapTextWithLogo = true;
+                }
             }
             else
             {

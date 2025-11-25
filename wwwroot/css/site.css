@@ -1821,6 +1821,47 @@ body {
 }
 
 @media (max-width: 992px) {
+  .main-nav-list {
+    width: 100%;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .main-nav-list > li {
+    width: 100%;
+  }
+
+  .main-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #ffffff;
+    color: #020617;
+    padding: 0.9rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  }
+
+  .main-nav-link::before {
+    display: none;
+  }
+
+  .nav-item-products-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nav-dropdown-toggle {
+    color: #6b7280;
+  }
+
+  .nav-item-products {
+    position: relative;
+  }
   .nav-dropdown-toggle {
     display: inline-flex;
     align-items: center;

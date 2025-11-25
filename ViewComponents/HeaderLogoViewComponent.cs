@@ -48,7 +48,14 @@ public class HeaderLogoViewComponent : ViewComponent
             if (System.IO.File.Exists(settingsPath))
             {
                 var raw = (await System.IO.File.ReadAllTextAsync(settingsPath)).Trim().ToLowerInvariant();
-                showKonapTextWithLogo = raw == "true" || raw == "1" || raw == "yes";
+                if (raw == "true" || raw == "1" || raw == "yes")
+                {
+                    showKonapTextWithLogo = true;
+                }
+                else if (raw == "false" || raw == "0" || raw == "no")
+                {
+                    showKonapTextWithLogo = false;
+                }
             }
         }
         catch
