@@ -99,6 +99,7 @@ public class ProductController : Controller
         }
 
         var product = await _context.Products
+            .Include(p => p.Category)
             .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
 
         if (product == null)
